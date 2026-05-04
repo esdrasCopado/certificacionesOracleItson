@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examen Oracle 1Z0-1085-25</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="exam-engine.css">
+<script>try{if(localStorage.getItem('oci-theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
+</head>
+<body class="grain">
+<div class="container">
+
+  <header>
+    <div class="brand">
+      <div class="brand-mark">O</div>
+      <div class="brand-text">
+        <div class="meta" id="exam-code">Oracle Certification</div>
+        <h1 id="exam-title">Examen de práctica</h1>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <a href="index.html" class="btn catalog-btn">← Catálogo</a>
+      <button class="theme-btn" id="theme-btn" title="Cambiar tema">🌙</button>
+      <div class="timer hidden" id="timer-box">
+        <div class="label">Tiempo</div>
+        <div class="time" id="timer">00:00</div>
+      </div>
+    </div>
+  </header>
+
+  <section id="start-screen" class="start-screen">
+    <div class="eyebrow">Examen de práctica</div>
+    <h2 id="exam-heading">Cargando&hellip;</h2>
+    <p class="sub" id="exam-description"></p>
+    <div class="stats-grid">
+      <div class="stat"><div class="stat-num" id="stat-questions">—</div><div class="stat-label">Preguntas</div></div>
+      <div class="stat"><div class="stat-num" id="stat-minutes">—</div><div class="stat-label">Min sugerido</div></div>
+      <div class="stat"><div class="stat-num" id="stat-pass">—</div><div class="stat-label">Para aprobar</div></div>
+      <div class="stat"><div class="stat-num" id="stat-lang">ES</div><div class="stat-label">Idioma</div></div>
+    </div>
+    <div class="mode-toggle" role="group">
+      <button class="active" data-mode="practice">Práctica</button>
+      <button data-mode="exam">Examen</button>
+    </div>
+    <p class="sub" style="margin-top:0;font-size:12px;">
+      <span id="mode-desc">Modo Práctica: muestra la respuesta correcta después de cada pregunta.</span>
+    </p>
+    <button class="btn btn-primary" id="start-btn" style="margin-top:20px;">Comenzar examen →</button>
+  </section>
+
+  <section id="quiz-screen" class="hidden">
+    <div class="progress-wrap">
+      <span class="progress-text" id="progress-text">01 / 50</span>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <span class="progress-text" id="answered-count">0 respondidas</span>
+    </div>
+    <div id="question-container"></div>
+    <div class="nav">
+      <button class="btn" id="prev-btn">← Anterior</button>
+      <button class="btn" id="finish-btn">Finalizar examen</button>
+      <button class="btn btn-primary" id="next-btn">Siguiente →</button>
+    </div>
+  </section>
+
+  <section id="results-screen" class="hidden results">
+    <div class="eyebrow" style="color:var(--accent);letter-spacing:.25em;font-size:11px;text-transform:uppercase;margin-bottom:12px;">Resultados</div>
+    <div class="score-display" id="score-percent">0%</div>
+    <div class="score-fraction" id="score-fraction">0 / 50 correctas</div>
+    <div class="score-verdict" id="verdict">—</div>
+    <div class="legend">
+      <span><span class="legend-dot correct"></span>Correcta</span>
+      <span><span class="legend-dot wrong"></span>Incorrecta</span>
+      <span><span class="legend-dot skipped"></span>Sin responder</span>
+    </div>
+    <div class="review-grid" id="review-grid"></div>
+    <p class="sub" style="font-size:12px;color:var(--text-muted);max-width:420px;margin:0 auto 28px;">
+      Haz clic en cualquier pregunta para revisarla.
+    </p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn" id="review-btn">Revisar respuestas</button>
+      <button class="btn btn-gold" id="restart-btn">Reiniciar examen</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const EXAM_META = {
+  code: '1Z0-1085-25',
+  title: 'OCI Foundations Associate',
+  heading: 'Asociado de<br><em>Fundaciones</em> OCI',
+  description: 'Examen interactivo de 50 preguntas basado en el examen oficial Oracle Cloud Infrastructure 2025 Foundations Associate. Selecciona el modo de estudio: práctica con retroalimentación inmediata o examen cronometrado.',
+  passPercent: 65,
+  suggestedMinutes: 90,
+  lang: 'ES'
+};
+
+const QUESTIONS = [
+  {
+    q: "En Oracle Cloud Infrastructure, ¿quién es responsable de proteger las cargas de trabajo y configurar los recursos de la nube?",
+    options: ["Sólo el cliente","Sólo Oracle","Servicios de seguridad de terceros","Tanto Oracle como el cliente"],
+    correct: 3,
+    explain: "Modelo de Responsabilidad Compartida: define qué partes de la seguridad gestiona cada parte. Oracle protege la infraestructura física, la red, los hipervisores y los servicios gestionados (la nube en sí). El cliente protege sus datos, identidades, aplicaciones, el SO en IaaS y todas sus configuraciones. Ninguna de las partes asume la responsabilidad completa sola; ambas deben cumplir sus roles para lograr seguridad end-to-end."
+  },
+  {
+    q: "¿Qué factor NO afecta el costo de ejecutar una instancia de máquina virtual en Oracle Cloud Infrastructure?",
+    options: ["El tamaño de la instancia de VM","El sistema operativo utilizado por la instancia de VM","El número de máquinas virtuales en ejecución","La región utilizada por la instancia de VM"],
+    correct: 2,
+    explain: "El costo de una VM en OCI se calcula por instancia individual según: (1) Shape/tamaño — número de OCPUs y RAM asignados; (2) Sistema operativo — algunos SO con licencia (Windows Server, RHEL) añaden un costo adicional por hora; (3) Región — los precios varían según la región geográfica. El 'número de VMs en ejecución' no es un factor de costo por instancia; cada VM se factura independientemente por sus propios atributos."
+  },
+  {
+    q: "En Oracle Cloud Infrastructure, ¿qué permite hacer el modelo de precios de Universal Credits a los clientes?",
+    options: ["Utilizar créditos prepagos para cualquier servicio en la nube elegible","Pagar un precio fijo por todos los servicios","Pagar sólo por los servicios que utilizan sin compromiso inicial","Recibir una cantidad fija de recursos por un precio específico"],
+    correct: 0,
+    explain: "Universal Credits es el modelo de precios de OCI basado en créditos prepagados con descuento por volumen y compromiso de tiempo. El cliente adquiere un monto de créditos y los consume libremente en cualquier servicio elegible de OCI (cómputo, almacenamiento, bases de datos, redes, etc.) dentro del período acordado. Esto le da flexibilidad para mover el gasto entre servicios según las necesidades del negocio, sin estar atado a SKUs fijos por cada servicio."
+  },
+  {
+    q: "¿Cuál es una ventaja clave de utilizar nodos virtuales en un clúster de OCI Kubernetes Engine?",
+    options: ["Proporcionan más flexibilidad de configuración en comparación con los nodos gestionados","Requieren actualizaciones manuales de la infraestructura del plano de datos","Sólo se pueden utilizar en clusters básicos","Permiten una experiencia Kubernetes sin servidor, lo que reduce la sobrecarga operativa"],
+    correct: 3,
+    explain: "OCI Kubernetes Engine (OKE): servicio gestionado de Kubernetes. Tipos de nodos worker: (1) Nodos gestionados (Managed Nodes) — el cliente provisiona y gestiona las instancias VM que forman el worker plane (parches, actualizaciones, escalado manual); (2) Nodos virtuales (Virtual Nodes) — experiencia sin servidor, Oracle gestiona completamente la infraestructura del worker plane. El cliente solo define los Pods/Deployments y OCI los ejecuta sin que el cliente administre ningún servidor, reduciendo drásticamente la sobrecarga operativa."
+  },
+  {
+    q: "¿Cuál es una característica clave de Oracle Cloud Infrastructure Functions?",
+    options: ["Se limita a ejecutar únicamente aplicaciones Java","Requiere una amplia administración de infraestructura","Aplica automáticamente parches y actualizaciones de software del sistema operativo","Requiere aprovisionamiento manual de instancias de cómputo"],
+    correct: 2,
+    explain: "OCI Functions es un servicio Function-as-a-Service (FaaS) / serverless basado en el proyecto open-source Fn Project. Oracle gestiona completamente la infraestructura subyacente: servidores, parchado del SO, actualizaciones de seguridad y escalado automático (incluyendo escalar a cero cuando no hay invocaciones). El cliente solo sube su código. Soporta múltiples lenguajes: Java, Python, Node.js, Go, Ruby. El modelo de facturación es por invocación y duración de ejecución."
+  },
+  {
+    q: "¿Qué afirmación describe mejor las instancias preemptivas en OCI?",
+    options: ["Son instancias de corta duración que se ofrecen a menor costo y que OCI puede recuperar","Actualizan automáticamente sus sistemas operativos sin la acción del usuario","Proporcionan un servidor físico dedicado sin interrupciones","Son instancias permanentes que OCI no puede cerrar"],
+    correct: 0,
+    explain: "Instancias preemptivas (Preemptible Instances): VMs disponibles al ~50% del precio de instancias estándar, usando capacidad sobrante de OCI. Limitaciones: OCI puede recuperarlas en cualquier momento con un aviso de 30 segundos, y tienen una duración máxima de 24 horas. Ideales para cargas tolerantes a interrupciones: procesamiento batch, HPC, CI/CD, entrenamiento de ML, renderizado. No deben usarse para servicios críticos que requieran disponibilidad continua, pues pueden terminar en cualquier momento."
+  },
+  {
+    q: "¿Cuál es el propósito principal de Oracle Cloud Infrastructure Functions?",
+    options: ["Para implementar y administrar máquinas virtuales","Proporcionar un servicio de base de datos administrado","Para ejecutar código en respuesta a eventos o solicitudes HTTP","Para almacenar y administrar archivos"],
+    correct: 2,
+    explain: "Function-as-a-Service (FaaS): modelo donde el código se ejecuta en respuesta a eventos sin gestionar servidores. OCI Functions puede dispararse por: mensajes en OCI Streaming, cambios en Object Storage, eventos de OCI Events Service, invocaciones HTTP directas o llamadas desde otras funciones. La facturación es por invocación y milisegundos de ejecución (pay-per-use), lo que lo hace muy económico para cargas esporádicas o de baja frecuencia."
+  },
+  {
+    q: "¿A qué se refiere el término 'Formas flexibles' (Flexible Shapes) en OCI Compute?",
+    options: ["La capacidad de personalizar la cantidad de OCPU y la cantidad de memoria para ciertas formas de VM","La capacidad de ejecutar OCI Compute sin definir CPU o memoria","Un servicio de orquestación de contenedores creado en Kubernetes","El nombre de la opción de computación sin servidor de Oracle"],
+    correct: 0,
+    explain: "Shape en OCI Compute: define los recursos de una instancia. Tipos: (1) Fixed Shapes — combinaciones fijas predefinidas de OCPUs y RAM (ej: VM.Standard2.1 = 1 OCPU, 15 GB RAM); (2) Flexible Shapes — el cliente elige libremente el número de OCPUs y la cantidad de RAM dentro de los rangos permitidos (ej: VM.Standard.E4.Flex: 1-64 OCPUs, 1-64 GB RAM por OCPU). OCPU = Oracle CPU ≈ 2 vCPUs físicos. Las Flexible Shapes permiten ajustar los recursos exactamente a la carga, optimizando el costo."
+  },
+  {
+    q: "¿Qué característica aprovecha el servicio Oracle Cloud Infrastructure Compute para garantizar una alta disponibilidad de aplicaciones?",
+    options: ["GoldenGate","Real Application Clusters (RAC)","Dominios de fallo (Fault Domains)","Data Guard"],
+    correct: 2,
+    explain: "Dominio de fallo (Fault Domain): agrupación lógica de hardware distinto dentro de un Dominio de disponibilidad. Cada Dominio de disponibilidad tiene exactamente 3 Dominios de fallo. Cada Dominio de fallo tiene su propia fuente de energía, switches de red y servidores físicos separados. Al distribuir instancias en distintos Dominios de fallo, si un rack de servidores o switch falla, solo el Dominio de fallo afectado se ve impactado — las instancias en los otros dos continúan funcionando. GoldenGate, RAC y Data Guard son tecnologías de Oracle Database para HA/replicación, no mecanismos de infraestructura de cómputo."
+  },
+  {
+    q: "¿Cuál de los siguientes NO es un caso de uso adecuado para instancias de contenedores OCI?",
+    options: ["Ejecución de aplicaciones en contenedores en Kubernetes","Realizar tareas de automatización para operaciones en la nube","Ejecución de APIs y aplicaciones web","Ejecución de trabajos de procesamiento de datos y medios"],
+    correct: 0,
+    explain: "OCI Container Instances: servicio para ejecutar contenedores individuales sin gestionar VMs ni Kubernetes. Casos de uso adecuados: APIs y apps web simples, tareas de automatización de operaciones cloud, jobs de procesamiento de datos o medios. El caso NO adecuado es Kubernetes orquestado: para eso existe OCI Kubernetes Engine (OKE), que ofrece scheduling, auto-scaling, rolling updates, service mesh y todas las capacidades de Kubernetes. Container Instances no reemplaza ni se integra como OKE."
+  },
+  {
+    q: "¿Qué tipo de almacenamiento OCI suele estar conectado localmente a una instancia de cómputo y ofrece un IOPS muy alto pero no es persistente?",
+    options: ["File Storage","NVMe local","Object Storage","Block Volume"],
+    correct: 1,
+    explain: "NVMe Local Storage: almacenamiento de alta velocidad físicamente integrado en el servidor host de la instancia (no es un volumen de red). Ventajas: latencia ultra-baja (microsegundos), IOPS extremadamente altos (millones de IOPS). Limitación crítica: no es persistente — los datos se pierden permanentemente si la instancia se termina, falla o migra. Usar para: caché de base de datos, datos temporales, HPC. El Block Volume ofrece persistencia pero con mayor latencia (acceso por red). File Storage = NFS compartido. Object Storage = blobs HTTP."
+  },
+  {
+    q: "¿Qué tipo de carga de trabajo NO es adecuada para utilizar el servicio Oracle Cloud Infrastructure File Storage?",
+    options: ["Big data y análisis","Procesamiento de medios","Gestión de contenidos","Ejecutar pequeños sitios web personales"],
+    correct: 3,
+    explain: "OCI File Storage Service: sistema de archivos distribuido y de alta disponibilidad compatible con NFS v3/v4.1. Permite que múltiples instancias accedan simultáneamente al mismo sistema de archivos, ideal para: Big Data y análisis (datos compartidos entre nodos), CMS (contenido compartido), procesamiento de medios (archivos grandes accedidos por varios servidores). Para un sitio web personal pequeño, es excesivo en costo y complejidad — bastaría con un Block Volume adjunto a una sola instancia o incluso Object Storage para archivos estáticos."
+  },
+  {
+    q: "En OCI Object Storage Service, ¿qué nivel de almacenamiento está diseñado para datos a los que rara vez se accede y que se pueden restaurar en cuestión de horas?",
+    options: ["Almacenamiento estándar","Niveles inteligentes","Acceso poco frecuente","Almacenamiento de archivo"],
+    correct: 3,
+    explain: "OCI Object Storage - Niveles de almacenamiento: (1) Estándar — acceso frecuente, recuperación inmediata, mayor costo por GB; (2) Acceso poco frecuente — datos accedidos pocas veces al mes, menor costo por GB, pero con tarifa de recuperación; (3) Archivo — datos raramente accedidos, mínimo costo por GB, pero requiere restaurar el objeto primero (tiempo de restauración: 1–12 horas) antes de poder descargarlo. Archivo es ideal para backups a largo plazo, registros de auditoría y datos históricos que raramente se consultan."
+  },
+  {
+    q: "¿Qué nivel de rendimiento NO está disponible en el servicio Oracle Cloud Infrastructure Block Volume?",
+    options: ["Rendimiento máximo","Alto rendimiento","Costo reducido","Equilibrado"],
+    correct: 0,
+    explain: "OCI Block Volume - Niveles de rendimiento disponibles: (1) Costo reducido (Lower Cost) — IOPS mínimo, para datos de acceso poco frecuente; (2) Equilibrado (Balanced) — equilibrio costo/rendimiento, adecuado para la mayoría de cargas; (3) Alto rendimiento (Higher Performance) — para bases de datos y cargas de alto IOPS; (4) Rendimiento ultraalto (Ultra High Performance) — máximo rendimiento, para workloads más exigentes. 'Rendimiento máximo' no es un nivel de rendimiento real en OCI Block Volume."
+  },
+  {
+    q: "¿Cuántas copias de datos suele mantener OCI para mayor durabilidad en Object Storage?",
+    options: ["Varias copias almacenadas de forma redundante en toda una región","No se almacenan copias redundantes a menos que el control de versiones se habilite manualmente","Dos copias en dos dominios de disponibilidad","Sólo una copia en el mismo dominio de disponibilidad"],
+    correct: 0,
+    explain: "OCI Object Storage garantiza una durabilidad de 11 nines (99.999999999%) replicando automáticamente los datos en múltiples servidores de almacenamiento distribuidos a través de toda la región. Esta redundancia es transparente y está activada por defecto sin costo adicional ni configuración manual. Object Versioning es una función separada y opcional que mantiene versiones históricas de los objetos para proteger contra eliminación o sobreescritura accidental, no para redundancia de hardware."
+  },
+  {
+    q: "¿Qué característica de OCI Object Storage permite mover automáticamente objetos entre niveles de almacenamiento según reglas predefinidas?",
+    options: ["Object Lifecycle Management","Pre-Authenticated Requests","Object Versioning","Cross-Region Replication"],
+    correct: 0,
+    explain: "Gestión del ciclo de vida de objetos (Object Lifecycle Management): funcionalidad de OCI Object Storage que permite definir reglas automáticas para gestionar el ciclo de vida de los objetos. Acciones disponibles: (1) Archivo — mover objetos al nivel Archivo después de N días; (2) Acceso poco frecuente — mover al nivel de Acceso poco frecuente para reducir costos; (3) Eliminar — borrar objetos o versiones antiguas automáticamente. Las reglas se aplican a todos los objetos del cubo o a los que coincidan con un prefijo de nombre. Reduce costos y la gestión manual de datos históricos. Solicitudes de preautenticación = acceso temporal a objetos sin autenticación."
+  },
+  {
+    q: "¿Qué nivel de OCI Object Storage es adecuado para datos a los que se debe acceder de forma rápida y frecuente, con alta accesibilidad y rendimiento?",
+    options: ["Almacenamiento de archivo","Almacenamiento estándar","Acceso poco frecuente","Organización automática en niveles"],
+    correct: 1,
+    explain: "OCI Object Storage - Nivel Estándar (nivel 'activo'): optimizado para datos de acceso frecuente. Características: recuperación inmediata (sin tiempo de espera), sin tarifas de recuperación adicionales, alta disponibilidad y baja latencia. Tiene el mayor costo por GB de los tres niveles. Ideal para: imágenes y assets de aplicaciones web activas, logs recientes en análisis, datos de referencia consultados regularmente. Comparar con Acceso poco frecuente (acceso esporádico, tarifa de recuperación) y Archivo (acceso rarísimo, restauración en horas)."
+  },
+  {
+    q: "¿Por qué es importante elegir una región OCI cercana a sus usuarios?",
+    options: ["Para permitir el escalamiento automático de recursos","Para garantizar que solo se utilice un dominio de disponibilidad","Para minimizar la latencia y mejorar el rendimiento de la aplicación","Para reducir el coste del almacenamiento en la nube"],
+    correct: 2,
+    explain: "Región de OCI: área geográfica que contiene uno o más dominios de disponibilidad. La latencia de red (RTT, tiempo de ida y vuelta) aumenta con la distancia física entre el servidor y el usuario final, típicamente a razón de ~1 ms por cada 100 km. Elegir una región cercana reduce el tiempo de respuesta percibido en cada interacción. Otras consideraciones al elegir región: cumplimiento normativo (soberanía de datos — algunos países exigen que los datos permanezcan en su territorio), disponibilidad de servicios específicos y precio (varía por región)."
+  },
+  {
+    q: "¿Qué es un dominio de disponibilidad en OCI?",
+    options: ["Un conjunto de redes virtuales en la nube","Uno o más centros de datos ubicados dentro de una región","Un tipo de tráfico cifrado","Un área geográfica localizada"],
+    correct: 1,
+    explain: "Dominio de disponibilidad (Availability Domain): uno o más centros de datos físicos dentro de una región de OCI, con infraestructura de energía, refrigeración y red completamente independiente de otros dominios de disponibilidad. Cada dominio de disponibilidad está aislado físicamente para que un desastre en uno no afecte a los demás. Los dominios de disponibilidad dentro de la misma región están interconectados por fibra privada de ultra-alta velocidad (&lt;1 ms de latencia). OCI tiene regiones con 1 dominio de disponibilidad (regiones menores) y regiones con 3 dominios de disponibilidad (regiones principales como us-ashburn-1). Un dominio de disponibilidad contiene múltiples dominios de fallo."
+  },
+  {
+    q: "¿Cuál es el propósito principal de los dominios de fallo en OCI?",
+    options: ["Para conectar dominios de disponibilidad con baja latencia","Para garantizar que todas las instancias estén en el mismo hardware físico","Para distribuir instancias entre diferentes hardware físico dentro de un dominio de disponibilidad","Para gestionar el cifrado del tráfico entre instancias"],
+    correct: 2,
+    explain: "Dominio de fallo (Fault Domain): subdivisión de hardware dentro de un Dominio de disponibilidad que crea grupos de fallos independientes. Cada Dominio de disponibilidad tiene exactamente 3 Dominios de fallo, con fuente de energía, switches de red y servidores físicamente separados. Al distribuir instancias en diferentes Dominios de fallo, si ocurre un fallo de hardware localizado (un rack, un switch) solo el Dominio de fallo afectado se ve impactado — las instancias en los otros dos continúan funcionando. Un Dominio de fallo protege contra fallos de hardware dentro del Dominio de disponibilidad; para protegerse contra fallos del Dominio de disponibilidad completo se debe replicar entre Dominios de disponibilidad."
+  },
+  {
+    q: "¿Por qué los dominios de disponibilidad dentro de la misma región de OCI están conectados por una red de baja latencia y gran ancho de banda?",
+    options: ["Para garantizar que todos los dominios compartan la misma infraestructura","Para permitir una conectividad de alta disponibilidad y construir sistemas replicados","Para reducir la necesidad de cifrado entre dominios","Para aumentar la probabilidad de fallos simultáneos"],
+    correct: 1,
+    explain: "La red privada entre dominios de disponibilidad dentro de una región de OCI es de ultra-alta velocidad, baja latencia y completamente cifrada. Esto permite: replicación síncrona de datos entre dominios de disponibilidad (Oracle Data Guard, RAC), arquitecturas activo-activo (tráfico distribuido entre dominios de disponibilidad) y conmutación por error automática ante la caída de un dominio de disponibilidad completo. Si los dominios de disponibilidad tuviesen conectividad lenta o pública, la replicación síncrona no sería práctica y los sistemas distribuidos sufrirían alta latencia."
+  },
+  {
+    q: "En OCI, ¿cuál es una razón clave para elegir un equilibrador de carga de red (Network Load Balancer) en lugar del equilibrador de carga estándar (HTTP/HTTPS)?",
+    options: ["El equilibrador de carga de red opera en la capa 4 y ofrece una latencia más baja para el tráfico TCP y UDP","El equilibrador de carga de red se utiliza únicamente para el tráfico de bases de datos dentro de una subred privada","El equilibrador de carga de red admite exclusivamente protocolos web (HTTP/HTTPS)","El equilibrador de carga de red puede realizar decisiones de enrutamiento complejas de capa 7"],
+    correct: 0,
+    explain: "Equilibrador de carga (Load Balancer): opera en Capa 7 del modelo OSI (HTTP/HTTPS), puede tomar decisiones de enrutamiento basadas en URL, headers, cookies. Tiene mayor funcionalidad pero más latencia por la inspección del contenido. Equilibrador de carga de red (Network Load Balancer): opera en Capa 4 (TCP/UDP/ICMP), solo ve puertos e IPs, no inspecciona el contenido. Ventaja: latencia extremadamente baja y mayor throughput. Ideal para: juegos en tiempo real, VoIP, trading de alta frecuencia, cualquier protocolo no-HTTP que requiera mínima latencia."
+  },
+  {
+    q: "¿Cuál es la función principal de una tabla de enrutamiento (Route Table) en OCI Networking?",
+    options: ["Proporcionar una conexión privada entre una VCN y una red local","Definir reglas para enrutar el tráfico desde subredes a destinos fuera de la VCN","Definir reglas que controlen el flujo de tráfico entre subredes","Para conectar una VCN a Internet pública"],
+    correct: 1,
+    explain: "Tabla de enrutamiento (Route Table): componente de una subred en OCI VCN que define hacia dónde se dirige el tráfico saliente. Cada regla contiene: un CIDR de destino + un destino (gateway). Gateways posibles: Gateway de Internet — tráfico hacia/desde Internet; Gateway de NAT — salida privada a Internet; Gateway de servicio — acceso a Oracle Services Network; Gateway de enrutamiento dinámico (DRG) — hacia on-premises vía FastConnect/VPN o interconexión de VCN. Importante: las tablas de enrutamiento definen HACIA DÓNDE va el tráfico; las listas de seguridad y los grupos de seguridad de red controlan QUÉ tráfico está permitido."
+  },
+  {
+    q: "¿Cuál es el propósito principal de un grupo de seguridad de red (NSG) en OCI Networking?",
+    options: ["Proporcionar una conexión privada entre una VCN y una red local","Para controlar el enrutamiento del tráfico entre VCN","Para conectar una VCN a Internet pública","Para controlar el flujo de tráfico entre recursos específicos dentro de una VCN"],
+    correct: 3,
+    explain: "Grupo de seguridad de red (Network Security Group, NSG): conjunto de reglas de firewall con estado (stateful) que se aplican a VNICs (tarjetas de interfaz de red virtual) individuales, no a toda la subred. Diferencia clave con las listas de seguridad: las listas de seguridad aplican a todos los recursos de una subred; los grupos de seguridad de red aplican a recursos específicos seleccionados. Ventaja adicional: en las reglas de un NSG se puede referenciar otro NSG como fuente/destino (ej: 'permitir TCP 1521 desde NSG-servidores-app al NSG-db'), simplificando políticas de seguridad para arquitecturas de varios niveles sin depender de rangos de IP."
+  },
+  {
+    q: "¿Qué tipo de política de balanceo de carga admite el equilibrador de carga de OCI?",
+    options: ["Aleatorio (Random)","Round Robin ponderado (parcial)","Round Robin ponderado (Weighted Round Robin)","Conexiones mínimas ponderadas (Weighted Least Connection)"],
+    correct: 2,
+    explain: "OCI Equilibrador de carga — Políticas de balanceo disponibles: (1) Round Robin — envía solicitudes secuencialmente a cada backend en rotación equitativa; (2) Hash de IP (IP Hash) — usa la IP del cliente como clave para enviar siempre al mismo backend (sesión persistente sin cookies); (3) Conexiones mínimas (Least Connections) — envía cada nueva conexión al backend con menos conexiones activas. Round Robin ponderado asigna pesos a los backends para distribuir la carga proporcionalmente (ej: 70% al servidor más potente). No existe una política 'Aleatorio' ni 'Conexiones mínimas ponderadas' en el equilibrador de carga de OCI."
+  },
+  {
+    q: "¿Qué componente de OCI Networking permite que los recursos de una VCN accedan a los servicios de Oracle Cloud sin atravesar la Internet pública?",
+    options: ["Gateway de NAT","Gateway de enrutamiento dinámico (DRG)","Gateway de servicio","Gateway de Internet"],
+    correct: 2,
+    explain: "Gateway de servicio (Service Gateway): componente de VCN que permite a los recursos en subredes privadas (sin IP pública) acceder a Oracle Services Network (OSN) sin atravesar Internet ni requerir un Gateway de NAT. Servicios accesibles a través del Gateway de servicio: Object Storage, Autonomous Database, Vault, OCI Registry y otros servicios de Oracle. Beneficios: el tráfico viaja solo por la red privada de Oracle (mayor seguridad), no tiene costo adicional de transferencia de datos y tiene menor latencia que ir por Internet. Se configura con una regla de enrutamiento en la subred apuntando al Gateway de servicio."
+  },
+  {
+    q: "¿Qué componente de red de OCI VCN proporciona instancias de cómputo en una subred privada con acceso a Internet saliente?",
+    options: ["Gateway de enrutamiento dinámico (DRG)","Gateway de Internet","Gateway de NAT","Gateway de servicio"],
+    correct: 2,
+    explain: "Gateway de NAT (Network Address Translation Gateway): permite que instancias en subredes privadas (sin IP pública asignada) inicien conexiones salientes hacia Internet, sin exponer una IP pública que acepte conexiones entrantes del exterior. Casos de uso: descargar parches del SO, actualizar paquetes, llamar a APIs externas desde servidores backend. Comparar con Gateway de Internet: permite tráfico bidireccional (entrante y saliente) pero requiere que el recurso tenga IP pública asignada. El Gateway de NAT es la opción para instancias que necesitan salida a Internet pero deben permanecer inaccesibles desde el exterior."
+  },
+  {
+    q: "¿Qué afirmación NO es cierta sobre los compartimentos en OCI?",
+    options: ["Los compartimentos son un recurso global","Los compartimentos proporcionan una forma de almacenar y administrar claves y secretos de cifrado","Los compartimentos se pueden anidar para crear una jerarquía","Las políticas de IAM se pueden redactar para otorgar acceso a recursos en compartimentos específicos"],
+    correct: 1,
+    explain: "Compartimento (Compartment): contenedor lógico y global para organizar y aislar recursos de OCI. Características verdaderas: son globales (aplican en todas las regiones), se pueden anidar hasta 6 niveles jerárquicos, y las políticas IAM del compartimento padre se heredan en los hijos. Lo que los compartimentos NO hacen: almacenar ni gestionar claves o secretos (esa es responsabilidad de OCI Vault), cifrar recursos automáticamente ni replicar datos entre regiones. Son exclusivamente una construcción de organización lógica y control de acceso."
+  },
+  {
+    q: "¿Cuál NO es un componente de una sentencia de política de IAM en OCI?",
+    options: ["Ubicación (compartimento o arrendamiento)","Tipo de recurso","Frecuencia de respaldo de datos","Verbo de acción"],
+    correct: 2,
+    explain: "Sintaxis completa de una política IAM en OCI: Allow &lt;sujeto&gt; to &lt;verbo&gt; &lt;tipo-de-recurso&gt; in &lt;ubicación&gt; [where &lt;condiciones&gt;]. Componentes: (1) Sujeto (Subject) — quién: usuario individual, grupo, instancia, servicio; (2) Verbo (Verb) — nivel de acceso: inspect (listar), read (leer), use (usar sin modificar), manage (control total); (3) Tipo de recurso (Resource-type) — qué: instances, volumes, buckets, users, etc. o 'all-resources'; (4) Ubicación (Location) — dónde: arrendamiento completo o un compartimento específico. La 'frecuencia de respaldo de datos' no forma parte de la sintaxis de políticas IAM."
+  },
+  {
+    q: "¿Qué declaración describe mejor el comportamiento predeterminado de autorización para usuarios y grupos en OCI IAM?",
+    options: ["El acceso a los recursos se otorga explícitamente en las políticas; de lo contrario, se deniega por defecto","Los usuarios y grupos deben solicitar acceso al administrador para cada recurso","A los usuarios y grupos se les concede acceso en función de sus roles sin necesidad de políticas","A los usuarios y grupos se les concede automáticamente acceso a todos los recursos"],
+    correct: 0,
+    explain: "OCI IAM sigue el principio de mínimo privilegio con 'deny by default' (denegación por defecto): ningún usuario, grupo o servicio tiene acceso a recursos de OCI a menos que exista una política IAM explícita que lo permita. Esto es diferente de sistemas donde los usuarios tienen permisos básicos heredados. El acceso se otorga escribiendo políticas IAM en lenguaje estructurado legible, que se asignan a grupos (no a usuarios directamente). Buena práctica: asignar usuarios a grupos con los permisos mínimos necesarios para su función (principio de mínimo privilegio)."
+  },
+  {
+    q: "¿Qué es un dominio de identidad (Identity Domain) en OCI?",
+    options: ["Un servicio de firewall que controla el acceso a los recursos de OCI","Un centro de datos físico que almacena credenciales de usuarios","Una subred privada utilizada para asegurar comunicaciones de red","Un contenedor lógico para administrar usuarios y grupos"],
+    correct: 3,
+    explain: "Dominio de identidad (Identity Domain): contenedor lógico dentro de OCI IAM que agrupa y gestiona: usuarios, grupos, aplicaciones integradas (SSO), configuraciones de federación de identidad (SAML 2.0 / OIDC con proveedores como Azure AD, Okta), políticas de contraseñas y configuración de MFA. OCI crea automáticamente un dominio 'Default'. Se pueden crear dominios adicionales para distintas unidades de negocio o requisitos de aislamiento. No confundir con: Zonas de seguridad (políticas de seguridad de recursos), Compartimento (organización de recursos) ni Vault (gestión de claves)."
+  },
+  {
+    q: "¿Qué servicio OCI NO está diseñado para uso con múltiples proveedores de nube?",
+    options: ["Oracle Roving Edge Infrastructure","Oracle Interconnect for Azure","MySQL HeatWave Database Service","Oracle Database@Azure"],
+    correct: 2,
+    explain: "Servicios OCI multi-cloud: Oracle Database@Azure — Oracle Exadata corriendo en data centers de Microsoft Azure, accesible con baja latencia desde Azure; Oracle Interconnect for Azure — conexión privada de alta velocidad entre OCI y Azure sin pasar por Internet; Oracle Roving Edge Infrastructure — hardware portátil con servicios OCI para edge computing o ubicaciones sin conectividad estable. MySQL HeatWave Database Service es un servicio nativo de OCI únicamente: motor MySQL con aceleración in-memory para analytics (OLAP) y ML, disponible solo en OCI, no en otras nubes."
+  },
+  {
+    q: "¿Qué oferta de OCI permite ejecutar servicios en la nube en su propio data center manteniendo cumplimiento regulatorio?",
+    options: ["MySQL HeatWave Database Service","Oracle Database Service for Azure","OCI Dedicated Region","Oracle Database@Azure"],
+    correct: 2,
+    explain: "Región dedicada de OCI (OCI Dedicated Region): Oracle instala, gestiona y opera una región completa de OCI dentro de las instalaciones físicas del cliente. El cliente obtiene todos los servicios de OCI con soberanía de datos total — los datos nunca salen de sus instalaciones. Ideal para: sectores con regulación estricta (gobierno, defensa, sector financiero, salud). Diferencias: Exadata Cloud@Customer = solo base de datos Oracle en hardware del cliente; Oracle Roving Edge Infrastructure = portátil para computación de borde; Región dedicada de OCI = la nube completa de OCI en instalaciones del cliente."
+  },
+  {
+    q: "¿Dónde se realizan las operaciones criptográficas para una clave de cifrado maestra de Vault protegida por un módulo de seguridad de hardware (HSM)?",
+    options: ["En la nube","En el cliente","En el módulo de seguridad de hardware (HSM)","En el servidor"],
+    correct: 2,
+    explain: "Módulo de seguridad de hardware (HSM, Hardware Security Module): dispositivo físico dedicado y certificado (FIPS 140-2 nivel 3) para realizar operaciones criptográficas de forma segura. En OCI Vault, las claves de cifrado maestras protegidas por HSM nunca salen del dispositivo en texto plano — ni siquiera Oracle puede extraerlas. Todas las operaciones (cifrado, descifrado, firma digital) ocurren dentro del HSM. Esto garantiza la máxima seguridad para datos sensibles. Las claves protegidas por software son más económicas pero se almacenan cifradas en memoria, ofreciendo un nivel de seguridad menor."
+  },
+  {
+    q: "¿Qué servicio de seguridad en OCI ayuda a proteger contra ataques de denegación de servicio distribuido (DDoS)?",
+    options: ["OCI Cloud Guard","OCI Vault","OCI Bastion","Firewall de aplicaciones web de OCI"],
+    correct: 3,
+    explain: "DDoS (Denegación de servicio distribuida): ataque donde múltiples fuentes inundan un servicio con tráfico para hacerlo inaccesible. Firewall de aplicaciones web de OCI (WAF): protege aplicaciones web contra DDoS en capa 7 (capa de aplicación), inyección SQL, XSS (secuencias de comandos en sitios cruzados), bots maliciosos y ataques de fuerza bruta. Comparar con otros servicios de seguridad de OCI: Cloud Guard — monitorea la postura de seguridad de todo el arrendamiento; Vault — gestiona claves y secretos; Bastion — acceso SSH/RDP seguro a recursos privados sin exponer puertos. Solo el firewall de aplicaciones web tiene capacidades específicas de mitigación de DDoS."
+  },
+  {
+    q: "¿Cuál es la ventaja de almacenar secretos en un Vault de OCI?",
+    options: ["Proporciona mayor seguridad que almacenarlos en código o archivos de configuración","Elimina la necesidad de tokens de autenticación","Hace que sea más fácil acceder a los secretos en código","Genera automáticamente nuevos secretos"],
+    correct: 0,
+    explain: "OCI Vault — Gestión de secretos: almacena de forma segura contraseñas, tokens de API, cadenas de conexión, certificados y cualquier dato sensible. Ventajas sobre incluir los secretos directamente en el código fuente: (1) Cifrado AES-256 en reposo con clave gestionada; (2) Control de acceso IAM granular (qué usuarios o servicios pueden leer cada secreto); (3) Rotación automática de secretos; (4) Auditoría completa en OCI Audit (quién accedió, cuándo y desde dónde); (5) Control de versiones (mantiene versiones anteriores). Las aplicaciones recuperan los secretos en tiempo de ejecución mediante la API, sin incluirlos en el código ni en los repositorios."
+  },
+  {
+    q: "¿Qué servicio OCI es responsable de almacenar y administrar de forma segura claves de cifrado y secretos?",
+    options: ["Security Zones","Vault","Security Advisor","Cloud Guard"],
+    correct: 1,
+    explain: "OCI Vault: servicio de gestión de claves (KMS) y gestión de secretos de OCI. Funciones: (1) Claves de cifrado maestras — claves maestras para cifrar/descifrar claves de datos; (2) Claves de datos — claves simétricas generadas para cifrar datos de servicios como Object Storage y Block Volume; (3) Secretos — almacenamiento seguro de credenciales y datos sensibles. Las claves pueden protegerse con HSM (FIPS 140-2 nivel 3, máxima seguridad) o por software (menor costo). Comparar: Cloud Guard detecta amenazas; Security Advisor genera recomendaciones de seguridad; Zonas de seguridad aplica políticas preventivas."
+  },
+  {
+    q: "¿Cómo garantiza OCI el cifrado de datos almacenados y transmitidos?",
+    options: ["OCI proporciona cifrado predeterminado para datos en reposo y en tránsito","Sólo los clientes pueden gestionar claves de cifrado a través de servicios de terceros","Los datos se cifran sólo en tránsito pero no en reposo","El cifrado debe habilitarse manualmente para cada depósito de almacenamiento"],
+    correct: 0,
+    explain: "OCI aplica cifrado por defecto sin configuración adicional: Datos en reposo (at rest) — todos los datos almacenados en Object Storage, Block Volume, File Storage y bases de datos se cifran con AES-256 usando Oracle-managed keys. Datos en tránsito (in transit) — toda la comunicación entre servicios OCI y entre el cliente y OCI usa TLS 1.2/1.3. El cliente puede optar por BYOK (Bring Your Own Key) usando OCI Vault para gestionar sus propias claves y tener control total sobre quién puede acceder a los datos. No se requiere activar el cifrado manualmente."
+  },
+  {
+    q: "¿Cómo se aplican las cuotas de compartimentos en OCI?",
+    options: ["Por compartimento","Por región","Por arrendamiento","A nivel mundial, en todos los compartimentos"],
+    correct: 2,
+    explain: "Cuotas de compartimento (Compartment Quotas): mecanismo para limitar el consumo de recursos en compartimentos específicos, gestionado desde el compartimento raíz del arrendamiento. Ejemplo de cuota: 'set compute-core quota standard-core-count to 10 in compartment dev' limita a 10 OCPUs de cómputo estándar en el compartimento de desarrollo. Diferencia importante: Límites de servicio (Service Limits) = límites globales del arrendamiento impuestos por Oracle (ej: máximo 1000 instancias totales), que se pueden solicitar aumentar. Cuotas de compartimento = subdivisión de los límites de servicio para controlar el gasto por equipo o proyecto."
+  },
+  {
+    q: "¿En qué le ayuda Oracle Cloud Advisor?",
+    options: ["Gestión de costos, desempeño y recomendaciones de alta disponibilidad","Solución automática de problemas","Sólo gestión de costes","Sólo resoluciones de seguridad"],
+    correct: 0,
+    explain: "OCI Cloud Advisor: servicio que analiza el uso de recursos y genera recomendaciones accionables en cuatro áreas: (1) Costo — identifica recursos sobreaprovisionados o infrautilizados (ej: instancias con CPU &lt;5% de uso que podrían reducirse); (2) Rendimiento — detecta cuellos de botella o configuraciones que limitan el throughput; (3) Alta Disponibilidad (HA) — alerta sobre instancias sin redundancia, backups no configurados, etc.; (4) Seguridad — señala configuraciones inseguras (buckets públicos, puertos abiertos). Las recomendaciones se pueden aplicar directamente desde la consola con un clic."
+  },
+  {
+    q: "¿Qué función NO proporcionan las zonas de seguridad de OCI?",
+    options: ["Almacenamiento y gestión de claves y secretos de cifrado","Aplicar automáticamente las mejores prácticas de seguridad","Supervisión continua de la postura de seguridad","Restringir la creación de recursos en función de políticas de seguridad predefinidas"],
+    correct: 0,
+    explain: "Zonas de seguridad de OCI (Security Zones): definen zonas donde ciertas acciones que violan las mejores prácticas están automáticamente bloqueadas. Utilizan recetas de seguridad (Security Recipes) como conjuntos de políticas. Funciones que SÍ proporciona: aplica automáticamente mejores prácticas (no se puede crear un cubo público en una zona de seguridad), supervisión continua de la postura de seguridad, restricción de recursos que no cumplan las políticas predefinidas. Lo que NO hace: almacenar ni gestionar claves o secretos — esa es la función exclusiva de OCI Vault."
+  },
+  {
+    q: "¿Qué es un dominio de disponibilidad en Oracle Cloud Infrastructure?",
+    options: ["Un área geográfica localizada","Un conjunto de redes virtuales en la nube","Un tipo de tráfico cifrado","Uno o más centros de datos ubicados dentro de una región"],
+    correct: 3,
+    explain: "Dominio de disponibilidad (Availability Domain): uno o más centros de datos físicos dentro de una región de OCI, con infraestructura completamente independiente (energía, refrigeración, red física). El aislamiento físico garantiza que un fallo catastrófico en un dominio de disponibilidad (incendio, corte de energía extendido) no afecte a los otros dominios de disponibilidad de la misma región. Jerarquía de OCI: Región &gt; Dominio de disponibilidad &gt; Dominio de fallo. No confundir: Región = área geográfica (ej: México Central), Dominio de disponibilidad = centro de datos dentro de la región, Dominio de fallo = grupo de hardware dentro del dominio de disponibilidad."
+  },
+  {
+    q: "¿Cuál es la principal diferencia entre una subred pública y una privada en una VCN OCI?",
+    options: ["Las subredes privadas solo se pueden crear en una región separada de la VCN","Las subredes públicas solo pueden alojar load balancers, mientras las privadas alojan bases de datos","Las subredes públicas requieren un bloque CIDR /24, mientras que las privadas no","Las subredes públicas permiten que los recursos tengan IPs públicas y acceso directo a Internet, mientras las privadas no"],
+    correct: 3,
+    explain: "VCN (Red virtual en la nube, Virtual Cloud Network): red privada virtual en OCI equivalente a una red corporativa tradicional. Subred pública: los recursos pueden recibir IPs públicas y tienen acceso bidireccional a Internet a través del Gateway de Internet. Usos típicos: equilibradores de carga, servidores web, hosts bastión. Subred privada: los recursos solo tienen IPs privadas RFC-1918, sin acceso directo a Internet. Acceso saliente a Internet mediante Gateway de NAT; acceso a servicios de Oracle a través del Gateway de servicio; acceso a on-premises mediante el DRG. Usos típicos: bases de datos, servidores de aplicaciones internos, backends."
+  },
+  {
+    q: "¿Por qué podría optar por utilizar contenedores en lugar de máquinas virtuales?",
+    options: ["Los contenedores proporcionan un mejor aislamiento que las máquinas virtuales","Los contenedores requieren más recursos para funcionar","Los contenedores permiten un tiempo de inicio más rápido y un uso más eficiente de los recursos","Los contenedores son menos flexibles en términos de asignación de recursos"],
+    correct: 2,
+    explain: "VM (Virtual Machine): virtualiza hardware completo con hipervisor, tiene su propio kernel y SO guest. Arranque: varios minutos. Overhead: GB de RAM para el SO. Contenedor: virtualiza solo el espacio de usuario del SO, compartiendo el kernel del host via namespaces y cgroups de Linux. Arranque: segundos o milisegundos. Recursos: solo los necesarios para la aplicación, sin SO completo. Mayor densidad (más contenedores por servidor). El aislamiento de VMs es mayor (kernel separado), pero los contenedores son más ágiles, eficientes y portables entre entornos. Docker es el estándar de facto para contenedores; Kubernetes para orquestarlos."
+  },
+  {
+    q: "¿Cuál es la mejor práctica recomendada para los administradores de arrendamiento de OCI?",
+    options: ["Permitir que todos los usuarios administren políticas sin restricciones","Utilizar la cuenta de administrador de arrendamiento para todas las operaciones diarias","Evitar crear múltiples compartimentos para simplificar la gestión","Aplicar siempre la autenticación multifactor (MFA) para mayor seguridad"],
+    correct: 3,
+    explain: "MFA (Autenticación multifactor, Multi-Factor Authentication): requiere dos o más factores de verificación para autenticar: algo que se sabe (contraseña) + algo que se tiene (app TOTP como Google Authenticator, clave FIDO2) o algo que se es (biometría). En OCI, la MFA es esencial para el administrador del arrendamiento porque esta cuenta tiene acceso sin restricciones a todos los recursos. Mejores prácticas adicionales: no usar la cuenta de administrador para operaciones diarias (crear cuentas individuales con privilegios mínimos), organizar recursos en compartimentos con políticas específicas, habilitar MFA para todos los usuarios con privilegios elevados."
+  },
+  {
+    q: "¿Cuál es el objetivo principal del Servicio de Transferencia de Datos de OCI (Data Transfer Service)?",
+    options: ["Migrar grupos de OKE entre regiones","Creación automática de múltiples copias de objetos en diferentes regiones","Cifrado de copias de seguridad de bases de datos en volúmenes de bloque","Facilitar la transferencia masiva de datos fuera de línea a OCI mediante discos o dispositivos"],
+    correct: 3,
+    explain: "Servicio de transferencia de datos de OCI (Data Transfer Service): solución para migrar grandes volúmenes de datos a OCI cuando la transferencia por red es inviable (demasiado lenta o costosa). El cliente copia sus datos en discos duros o dispositivos especiales proporcionados por Oracle, los envía físicamente a un centro de datos de Oracle y Oracle carga los datos en OCI Object Storage. Útil cuando: se tienen petabytes de datos, el ancho de banda disponible es limitado o se necesita completar la migración rápidamente. No confundir con: OCI Data Integration (ETL en la nube) ni con el Servicio de migración de bases de datos."
+  },
+  {
+    q: "En OCI Block Volume Service, ¿qué función permite aumentar el tamaño de un volumen de bloque sin tiempo de inactividad?",
+    options: ["Redimensionamiento en línea (Online Resizing)","Redimensionamiento dinámico de volumen","Expansión de rendimiento de volumen","Elasticidad de volumen"],
+    correct: 0,
+    explain: "Redimensionamiento en línea (Online Resizing): permite aumentar la capacidad de un volumen de bloque mientras está adjunto y en uso activo por una instancia, sin tiempo de inactividad. Proceso completo: (1) Ampliar el volumen en la consola o CLI de OCI; (2) Extender la partición de disco en el SO de la instancia; (3) Expandir el sistema de archivos (ej: resize2fs para ext4). Restricción: solo se puede aumentar el tamaño, nunca reducirlo. La instancia no necesita reiniciarse en ningún paso. Las otras opciones mencionadas no son funciones reales del servicio Block Volume de OCI."
+  },
+  {
+    q: "¿Cuál es la responsabilidad principal del cliente en el modelo de responsabilidad compartida de OCI?",
+    options: ["Mantener la infraestructura física","Proteger las cargas de trabajo, los datos y las configuraciones","Gestionar los hipervisores","Mantener los centros de datos"],
+    correct: 1,
+    explain: "Modelo de responsabilidad compartida — lado del cliente: el cliente es responsable de la seguridad EN la nube. Esto incluye: (1) Datos — clasificación, cifrado con sus propias claves, control de acceso; (2) Identidades — gestión de usuarios IAM, contraseñas seguras, MFA; (3) Aplicaciones — código seguro, parches de sus aplicaciones; (4) SO en IaaS — parches del sistema operativo en sus VMs; (5) Configuración de red — listas de seguridad, grupos de seguridad de red, reglas de firewall; (6) Configuración de servicios — permisos de cubos, configuración de bases de datos. Oracle es responsable de la infraestructura física y los servicios gestionados."
+  },
+  {
+    q: "¿Qué característica de OCI permite replicar cubos de Object Storage a otra región automáticamente?",
+    options: ["Replicación entre regiones","Control de versiones de objetos","Gestión del ciclo de vida","Solicitudes de preautenticación"],
+    correct: 0,
+    explain: "Replicación entre regiones (Cross-Region Replication) de OCI Object Storage: copia automática y asíncrona de objetos de un cubo origen a un cubo destino en una región diferente. Casos de uso: recuperación ante desastres (DR) — respaldo geográfico ante un fallo de una región completa; presencia multi-región — contenido cerca de usuarios en distintas geografías; cumplimiento normativo — copias de datos en jurisdicciones específicas. La replicación es unidireccional de forma predeterminada. Los objetos eliminados en el origen también se eliminan en el destino. Diferente de: control de versiones de objetos (historial en la misma región), gestión del ciclo de vida (cambio de niveles) y solicitudes de preautenticación (acceso temporal)."
+  },
+  {
+    q: "¿Cuál de los siguientes es un beneficio de los compartimentos en OCI?",
+    options: ["Aislamiento lógico de recursos para organización y control de acceso","Cifrado automático de todos los recursos","Replicación automática entre regiones","Backup automático de bases de datos"],
+    correct: 0,
+    explain: "Compartimentos en OCI — beneficios principales: (1) Organización lógica — agrupar recursos por proyecto, equipo o entorno (desarrollo/pruebas/producción); (2) Control de acceso granular — aplicar políticas IAM específicas por compartimento (el equipo de desarrollo solo accede al compartimento de desarrollo); (3) Visibilidad y control de costos — ver el gasto desglosado por compartimento en el Análisis de costos; (4) Cuotas — limitar la cantidad de recursos que puede consumir cada compartimento; (5) Aislamiento — facilita la auditoría y reduce el riesgo de cambios accidentales entre entornos. Los compartimentos NO proporcionan: cifrado automático, replicación de datos ni copias de seguridad automáticas."
+  }
+];
+</script>
+<script src="exam-engine.js"></script>
+</body>
+</html>
