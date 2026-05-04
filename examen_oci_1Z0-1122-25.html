@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examen Oracle 1Z0-1122-25</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="exam-engine.css">
+<script>try{if(localStorage.getItem('oci-theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
+</head>
+<body class="grain">
+<div class="container">
+
+  <header>
+    <div class="brand">
+      <div class="brand-mark">O</div>
+      <div class="brand-text">
+        <div class="meta" id="exam-code">Oracle Certification</div>
+        <h1 id="exam-title">Examen de práctica</h1>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <a href="index.html" class="btn catalog-btn">← Catálogo</a>
+      <button class="theme-btn" id="theme-btn" title="Cambiar tema">🌙</button>
+      <div class="timer hidden" id="timer-box">
+        <div class="label">Tiempo</div>
+        <div class="time" id="timer">00:00</div>
+      </div>
+    </div>
+  </header>
+
+  <section id="start-screen" class="start-screen">
+    <div class="eyebrow">Examen de práctica</div>
+    <h2 id="exam-heading">Cargando&hellip;</h2>
+    <p class="sub" id="exam-description"></p>
+    <div class="stats-grid">
+      <div class="stat"><div class="stat-num" id="stat-questions">—</div><div class="stat-label">Preguntas</div></div>
+      <div class="stat"><div class="stat-num" id="stat-minutes">—</div><div class="stat-label">Min sugerido</div></div>
+      <div class="stat"><div class="stat-num" id="stat-pass">—</div><div class="stat-label">Para aprobar</div></div>
+      <div class="stat"><div class="stat-num" id="stat-lang">EN</div><div class="stat-label">Idioma</div></div>
+    </div>
+    <div class="mode-toggle" role="group">
+      <button class="active" data-mode="practice">Práctica</button>
+      <button data-mode="exam">Examen</button>
+    </div>
+    <p class="sub" style="margin-top:0;font-size:12px;">
+      <span id="mode-desc">Modo Práctica: muestra la respuesta correcta después de cada pregunta.</span>
+    </p>
+    <button class="btn btn-primary" id="start-btn" style="margin-top:20px;">Comenzar examen →</button>
+  </section>
+
+  <section id="quiz-screen" class="hidden">
+    <div class="progress-wrap">
+      <span class="progress-text" id="progress-text">01 / 44</span>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <span class="progress-text" id="answered-count">0 respondidas</span>
+    </div>
+    <div id="question-container"></div>
+    <div class="nav">
+      <button class="btn" id="prev-btn">← Anterior</button>
+      <button class="btn" id="finish-btn">Finalizar examen</button>
+      <button class="btn btn-primary" id="next-btn">Siguiente →</button>
+    </div>
+  </section>
+
+  <section id="results-screen" class="hidden results">
+    <div class="eyebrow" style="color:var(--accent);letter-spacing:.25em;font-size:11px;text-transform:uppercase;margin-bottom:12px;">Resultados</div>
+    <div class="score-display" id="score-percent">0%</div>
+    <div class="score-fraction" id="score-fraction">0 / 44 correctas</div>
+    <div class="score-verdict" id="verdict">—</div>
+    <div class="legend">
+      <span><span class="legend-dot correct"></span>Correcta</span>
+      <span><span class="legend-dot wrong"></span>Incorrecta</span>
+      <span><span class="legend-dot skipped"></span>Sin responder</span>
+    </div>
+    <div class="review-grid" id="review-grid"></div>
+    <p class="sub" style="font-size:12px;color:var(--text-muted);max-width:420px;margin:0 auto 28px;">
+      Haz clic en cualquier pregunta para revisarla.
+    </p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn" id="review-btn">Revisar respuestas</button>
+      <button class="btn btn-gold" id="restart-btn">Reiniciar examen</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const EXAM_META = {
+  code: '1Z0-1122-25',
+  title: 'OCI AI Foundations Associate',
+  heading: 'OCI <em>AI Foundations</em><br>Associate',
+  description: 'Examen interactivo de 44 preguntas en inglés basado en el examen oficial Oracle Cloud Infrastructure 2025 AI Foundations Associate. Las preguntas y opciones se presentan en inglés tal como aparecen en el examen real.',
+  passPercent: 65,
+  suggestedMinutes: 85,
+  lang: 'EN'
+};
+
+const QUESTIONS = [
+  {
+    q: "Which AI domain can be employed for identifying patterns in images and extract relevant features?",
+    options: [
+      "Speech Processing",
+      "Anomaly Detection",
+      "Computer Vision",
+      "Natural Language Processing"
+    ],
+    correct: 2,
+    explain: "Computer Vision es la rama de IA especializada en procesar e interpretar imágenes y vídeo: detecta objetos, clasifica imágenes, reconoce rostros y extrae características visuales. NLP trabaja con texto, Speech Processing con audio, y Anomaly Detection identifica irregularidades en datos numéricos o de series temporales."
+  },
+  {
+    q: "Which statement best describes the relationship between Artificial Intelligence (AI), Machine Learning (ML), and Deep Learning (DL)?",
+    options: [
+      "DL is a subset of AI, and ML is a subset of DL.",
+      "AI is a subset of DL, which is a subset of ML.",
+      "AI, ML, and DL are entirely separate fields with no overlap.",
+      "ML is a subset of AI, and DL is a subset of ML."
+    ],
+    correct: 3,
+    explain: "La relación es de círculos concéntricos: AI es el campo más amplio que engloba cualquier técnica para imitar la inteligencia humana. ML es subcategoría de AI que aprende patrones de datos. DL es subcategoría de ML que usa redes neuronales profundas para aprender representaciones jerárquicas."
+  },
+  {
+    q: "What role do Transformers perform in Large Language Models (LLMs)?",
+    options: [
+      "Image recognition tasks in LLMs",
+      "Provide a mechanism to process sequential data in parallel and capture long-range dependencies.",
+      "Manually engineer features in the data before training the model",
+      "Limit the ability of LLMs to handle large datasets by imposing strict memory constraints"
+    ],
+    correct: 1,
+    explain: "Los Transformers usan el mecanismo de atención para procesar todos los tokens de una secuencia en paralelo (a diferencia de las RNN que lo hacen de forma secuencial), capturando dependencias de largo alcance entre palabras sin importar su distancia. Esto los hace mucho más eficientes para tareas de NLP."
+  },
+  {
+    q: "Emma works for a customer feedback analysis team and needs to extract insights from thousands of online product reviews. She wants to determine if customers express positive or negative opinions about different aspects, such as price, quality, and customer service. Which feature of OCI Language is helpful for her?",
+    options: [
+      "Named entity recognition",
+      "Language detection",
+      "Key phrase extraction",
+      "Sentiment analysis"
+    ],
+    correct: 3,
+    explain: "Sentiment Analysis de OCI Language evalúa el tono emocional (positivo, negativo o neutro) de fragmentos de texto, pudiendo desglosarlo por aspecto. Es la herramienta perfecta para entender las opiniones de clientes sobre dimensiones específicas como precio, calidad y servicio al cliente en reseñas escritas."
+  },
+  {
+    q: "You are training a deep learning model to classify images. What is the primary function of the convolutional layer?",
+    options: [
+      "To detect specific features in the input image",
+      "To classify the input image",
+      "To generate new images",
+      "To reduce the spatial dimensions of the input image"
+    ],
+    correct: 0,
+    explain: "Las capas convolucionales aplican filtros (kernels) sobre la imagen para detectar características locales como bordes, texturas y formas. La reducción de dimensiones espaciales la realiza la capa pooling, la clasificación final las capas densas (fully connected), y la generación de imágenes corresponde a arquitecturas como GAN."
+  },
+  {
+    q: "How do Large Language Models (LLMs) handle the trade-off between model size, data quality, data size and performance?",
+    options: [
+      "They prioritize larger model sizes to achieve better performance.",
+      "They focus on increasing the number of tokens while keeping the model size constant.",
+      "They disregard model size and prioritize high-quality data only.",
+      "They ensure that the model size, training time, and data size are balanced for optimal results."
+    ],
+    correct: 3,
+    explain: "Los LLM modernos siguen la Chinchilla Scaling Law: el tamaño del modelo y el número de tokens de entrenamiento deben escalar de forma equilibrada para maximizar el rendimiento dado un presupuesto computacional fijo. Aumentar solo el tamaño del modelo o solo los datos resulta en modelos subóptimos."
+  },
+  {
+    q: "In machine learning, what does the term \"model training\" mean?",
+    options: [
+      "Performing data analysis on collected and labeled data",
+      "Establishing a relationship between input features and output",
+      "Analyzing the accuracy of a trained model",
+      "Writing code for the entire program"
+    ],
+    correct: 1,
+    explain: "El entrenamiento del modelo es el proceso iterativo de ajustar los pesos internos minimizando el error entre predicciones del modelo y etiquetas reales. El resultado es un modelo que ha aprendido una función matemática que relaciona entradas con salidas, generalizable a nuevos datos no vistos."
+  },
+  {
+    q: "What key objective does machine learning strive to achieve?",
+    options: [
+      "Improving computer hardware",
+      "Enabling computers to learn and improve from experience",
+      "Explicitly programming computers",
+      "Creating algorithms to solve complex problems"
+    ],
+    correct: 1,
+    explain: "El objetivo central del ML es dotar a los sistemas de la capacidad de aprender automáticamente a partir de datos y experiencias pasadas, mejorando su rendimiento sin necesidad de ser programados explícitamente para cada caso. La mejora proviene de la exposición a datos, no de instrucciones codificadas manualmente."
+  },
+  {
+    q: "What is the main function of the hidden layers in an Artificial Neural Network (ANN) when recognizing handwritten digits?",
+    options: [
+      "Storing the input pixel values",
+      "Providing labels for the output neurons",
+      "Directly predicting the final output",
+      "Capturing the internal representation of the raw image data"
+    ],
+    correct: 3,
+    explain: "Las capas ocultas aprenden representaciones internas jerárquicas de los datos en bruto. En reconocimiento de dígitos manuscritos, las primeras capas detectan bordes, las intermedias formas y curvas, y las más profundas representaciones de dígitos completos. Esta jerarquía de características abstraídas permite la clasificación correcta."
+  },
+  {
+    q: "Which algorithm is primarily used for adjusting the weights of connections between neurons during the training of an Artificial Neural Network (ANN)?",
+    options: [
+      "Backpropagation",
+      "Random Forest",
+      "Gradient Descent",
+      "Support Vector Machine"
+    ],
+    correct: 0,
+    explain: "Backpropagation calcula el gradiente del error respecto a cada peso de la red propagando el error de forma inversa desde la capa de salida hasta la de entrada mediante la regla de la cadena. Estos gradientes son usados por el optimizador (generalmente SGD o Adam) para actualizar los pesos y reducir la función de pérdida."
+  },
+  {
+    q: "What is the key feature of Recurrent Neural Networks (RNNs)?",
+    options: [
+      "They have a feedback loop that allows information to persist across different time steps.",
+      "They process data in parallel.",
+      "They do not have an internal state.",
+      "They are primarily used for image recognition tasks."
+    ],
+    correct: 0,
+    explain: "Las RNN mantienen un estado oculto que actúa como memoria a corto plazo, transfiriendo información de pasos temporales anteriores a los siguientes mediante un bucle de retroalimentación. Esto las hace idóneas para datos secuenciales como texto, audio o series temporales, donde el contexto previo es esencial."
+  },
+  {
+    q: "You are working on a multilingual public announcement system. Which AI task will you use to implement it?",
+    options: [
+      "Audio recording",
+      "Text to speech",
+      "Speech recognition",
+      "Text summarization"
+    ],
+    correct: 1,
+    explain: "Text-to-Speech (TTS) convierte texto escrito en audio hablado sintetizado en múltiples idiomas y voces, siendo ideal para sistemas de anuncios públicos multilingües. Speech recognition realiza la operación inversa (audio → texto). Audio recording captura audio humano real, y text summarization condensa contenido textual."
+  },
+  {
+    q: "Which AI domain is associated with tasks such as identifying the sentiment of text and translating text between languages?",
+    options: [
+      "Anomaly Detection",
+      "Natural Language Processing",
+      "Computer Vision",
+      "Speech Processing"
+    ],
+    correct: 1,
+    explain: "Natural Language Processing (NLP) se centra en la comprensión y generación de texto escrito. El análisis de sentimientos y la traducción automática entre idiomas son dos de las tareas NLP más representativas. Computer Vision trabaja con imágenes y Speech Processing con audio."
+  },
+  {
+    q: "What would you use Oracle AI Vector Search for?",
+    options: [
+      "Store business data in a cloud database.",
+      "Manage database security protocols.",
+      "Query data based on semantics.",
+      "Query data based on keywords."
+    ],
+    correct: 2,
+    explain: "Oracle AI Vector Search almacena representaciones vectoriales (embeddings) de datos no estructurados y permite realizar búsquedas semánticas basadas en la similitud del significado, no en coincidencias exactas de palabras clave. Es fundamental para construir aplicaciones de IA generativa como RAG (Retrieval-Augmented Generation) directamente sobre la base de datos Oracle."
+  },
+  {
+    q: "What is the primary purpose of reinforcement learning?",
+    options: [
+      "Making predictions from labeled data",
+      "Learning from outcomes to make decisions",
+      "Identifying patterns in data",
+      "Finding relationships within data sets"
+    ],
+    correct: 1,
+    explain: "Reinforcement Learning entrena a un agente para tomar decisiones secuenciales en un entorno maximizando una recompensa acumulativa. El agente aprende por prueba y error: recibe retroalimentación positiva (reward) o negativa (penalty) por cada acción y ajusta su política de decisión para maximizar las recompensas futuras."
+  },
+  {
+    q: "What distinguishes Generative AI from other types of AI?",
+    options: [
+      "Generative AI creates diverse content such as text, audio, and images by learning patterns from existing data.",
+      "Generative AI involves training models to perform tasks without human intervention.",
+      "Generative AI uses algorithms to predict outcomes based on past data.",
+      "Generative AI focuses on making decisions based on user interactions."
+    ],
+    correct: 0,
+    explain: "La IA Generativa aprende la distribución estadística de los datos de entrenamiento y puede generar nuevos contenidos originales (texto, imágenes, audio, código, vídeo) coherentes con esa distribución. Esto la diferencia de la IA discriminativa, que solo clasifica o predice etiquetas para entradas existentes sin crear contenido nuevo."
+  },
+  {
+    q: "Which feature is NOT available as part of OCI Speech capabilities?",
+    options: [
+      "Provides timestamped, grammatically accurate transcriptions",
+      "Transcribes audio and video files into text",
+      "Uses extensive data science experience to operate",
+      "Supports multiple languages including English, Spanish, and Portuguese"
+    ],
+    correct: 2,
+    explain: "OCI Speech es un servicio de IA gestionado que NO requiere experiencia en ciencia de datos para operar. Los usuarios simplemente envían archivos de audio o vídeo y obtienen transcripciones mediante API, sin entrenar modelos ni gestionar infraestructura. Las demás opciones sí son características reales del servicio."
+  },
+  {
+    q: "Which feature of OCI Speech helps make transcriptions easier to read and understand?",
+    options: [
+      "Timestamping",
+      "Audio tuning",
+      "Profanity filtering",
+      "Text normalization"
+    ],
+    correct: 3,
+    explain: "Text Normalization convierte formas no estándar presentes en el audio transcrito (números, fechas, cantidades, abreviaturas) en sus formas escritas convencionales. Por ejemplo, convierte '1234' en 'one thousand two hundred thirty four' o fechas en formato extendido, haciendo las transcripciones más legibles y comprensibles."
+  },
+  {
+    q: "What can Oracle Cloud Infrastructure Document Understanding NOT do?",
+    options: [
+      "Extract tables from documents",
+      "Classify documents into different types",
+      "Extract text from documents",
+      "Generate transcript from documents"
+    ],
+    correct: 3,
+    explain: "OCI Document Understanding opera exclusivamente sobre documentos visuales (PDF, imágenes): extrae texto mediante OCR, detecta y extrae tablas y pares clave-valor, y clasifica documentos por tipo. No procesa archivos de audio ni genera transcripciones de audio; esa función pertenece al servicio OCI Speech."
+  },
+  {
+    q: "Which statement describes the Optical Character Recognition (OCR) feature of Oracle Cloud Infrastructure Document Understanding?",
+    options: [
+      "It recognizes and extracts text from a document.",
+      "It enhances the visual quality of documents.",
+      "It converts audio files into text.",
+      "It provides real-time translation of text."
+    ],
+    correct: 0,
+    explain: "El OCR de OCI Document Understanding analiza la representación visual de documentos escaneados o fotografiados —donde el texto existe como píxeles de imagen— y reconoce y extrae ese texto para convertirlo en datos procesables por máquina. Es la función base sobre la que se construyen las demás capacidades del servicio."
+  },
+  {
+    q: "Lisa is working on a project that involves transcribing thousands of audio files stored in Oracle Cloud. She wants to process multiple files efficiently instead of transcribing them one by one. Which OCI Speech feature should Lisa use?",
+    options: [
+      "Confidence scoring",
+      "Time stamping",
+      "Batch support",
+      "Profanity filtering"
+    ],
+    correct: 2,
+    explain: "Batch Support de OCI Speech permite enviar múltiples archivos de audio o vídeo en una sola solicitud para su transcripción asíncrona. El servicio procesa todos los archivos en paralelo y devuelve los resultados cuando finaliza, sin necesidad de gestionarlos uno a uno. Es la solución ideal para grandes volúmenes de archivos."
+  },
+  {
+    q: "Which capability is supported by the Oracle Cloud Infrastructure Vision service?",
+    options: [
+      "Detecting and preventing fraud in financial transactions",
+      "Analyzing historical data for unusual patterns",
+      "Detecting vehicle number plates to issue speed citations",
+      "Generating realistic images from text"
+    ],
+    correct: 2,
+    explain: "OCI Vision puede analizar imágenes para detectar objetos con bounding boxes y leer texto mediante OCR. La detección de matrículas combina ambas capacidades: detectar el objeto (la matrícula) y leer el texto alfanumérico que contiene, aplicable en sistemas de vigilancia de tráfico. La detección de fraude y la generación de imágenes son capacidades de otros servicios."
+  },
+  {
+    q: "How does Oracle Cloud Infrastructure Document Understanding service facilitate business processes?",
+    options: [
+      "By analyzing sentiment in text documents",
+      "By automating data extraction from documents",
+      "By transcribing spoken language",
+      "By generating lifelike speech from documents"
+    ],
+    correct: 1,
+    explain: "OCI Document Understanding automatiza la extracción de datos estructurados (campos de texto, tablas, pares clave-valor) de documentos no estructurados como facturas, contratos y formularios. Esto elimina la entrada manual de datos, acelera los flujos de trabajo documentales y reduce errores humanos en procesos de negocio."
+  },
+  {
+    q: "You are part of the medical transcription team and need to automate transcription tasks. Which OCI AI service are you most likely to use?",
+    options: [
+      "Vision",
+      "Document Understanding",
+      "Language",
+      "Speech"
+    ],
+    correct: 3,
+    explain: "OCI Speech transcribe automáticamente archivos de audio (consultas médicas, dictados de médicos) a texto con marcas de tiempo y alta precisión, siendo la herramienta ideal para automatizar transcripción médica. OCI Vision trabaja con imágenes, Document Understanding con documentos visuales, y Language analiza texto ya escrito."
+  },
+  {
+    q: "Which component in OCI Data Science provides an interactive coding environment for building and training models?",
+    options: [
+      "Notebook Sessions",
+      "Conda Environments",
+      "Model Catalog",
+      "Data Science Jobs"
+    ],
+    correct: 0,
+    explain: "Notebook Sessions en OCI Data Science son entornos Jupyter gestionados con acceso a cómputo escalable, almacenamiento de objetos y librerías de ML/DL preinstaladas. Los científicos de datos los usan para explorar datos, desarrollar modelos y ejecutar experimentos de forma iterativa e interactiva."
+  },
+  {
+    q: "What is the purpose of the model catalog in OCI Data Science?",
+    options: [
+      "To create and switch between different environments",
+      "To store, track, share, and manage models",
+      "To deploy models as HTTP endpoints",
+      "To provide a preinstalled open source library"
+    ],
+    correct: 1,
+    explain: "El Model Catalog de OCI Data Science es un repositorio centralizado que permite almacenar modelos con sus metadatos, versiones y artefactos; rastrear su linaje y procedencia; compartirlos entre equipos; y gestionar su ciclo de vida completo. Facilita la gobernanza y reutilización de modelos en la organización."
+  },
+  {
+    q: "What is the purpose of Attention Mechanism in Transformer architecture?",
+    options: [
+      "Weigh the importance of different words within a sequence and understand the context.",
+      "Break down a sentence into smaller pieces called tokens.",
+      "Convert tokens into numerical forms (vectors) that the model can understand.",
+      "Apply a specific function to each word individually."
+    ],
+    correct: 0,
+    explain: "El Attention Mechanism permite al Transformer calcular y asignar pesos de importancia relativos a cada token en relación con todos los demás, capturando dependencias contextuales a cualquier distancia. La tokenización divide el texto en tokens, los embeddings convierten tokens en vectores, y las funciones de activación operan sobre neuronas individuales."
+  },
+  {
+    q: "What is the role of the self-attention mechanism in a transformer model?",
+    options: [
+      "It assigns different importance to each word in a sequence based on context.",
+      "It replaces all previous deep learning techniques for text processing.",
+      "It memorizes and retrieves specific words from past training examples.",
+      "It forces the model to only focus on the most recent words in a sequence."
+    ],
+    correct: 0,
+    explain: "Self-attention computa la relevancia de cada token respecto a todos los demás tokens de la misma secuencia, permitiendo capturar el contexto y resolver ambigüedades semánticas independientemente de la distancia entre palabras. Por ejemplo, en 'The bank was on the river bank', la auto-atención ayuda a desambiguar 'bank' según el contexto circundante."
+  },
+  {
+    q: "Which type of machine learning is used to understand relationships within data and is not focused on making predictions or classifications?",
+    options: [
+      "Supervised learning",
+      "Unsupervised learning",
+      "Reinforcement learning",
+      "Active learning"
+    ],
+    correct: 1,
+    explain: "Unsupervised Learning trabaja con datos sin etiquetar y busca descubrir estructuras ocultas, agrupaciones (clustering), asociaciones y reducciones de dimensionalidad intrínsecas en los datos. A diferencia del supervisado, no predice etiquetas predefinidas, sino que revela patrones y relaciones emergentes."
+  },
+  {
+    q: "You're analyzing customer feedback forms to identify common complaints. Which machine learning approach would you use?",
+    options: [
+      "Reinforcement Learning",
+      "Deep Learning",
+      "Unsupervised Learning",
+      "Supervised Learning"
+    ],
+    correct: 2,
+    explain: "Identificar quejas comunes sin categorías predefinidas es una tarea de descubrimiento de patrones que corresponde a Unsupervised Learning, concretamente al clustering. El algoritmo agrupa automáticamente las reseñas similares entre sí, permitiendo descubrir temas o quejas recurrentes sin etiquetar los datos de antemano."
+  },
+  {
+    q: "How is \"Prompt Engineering\" different from \"Fine-tuning\" in the context of Large Language Models (LLMs)?",
+    options: [
+      "Prompt Engineering modifies training data, while Fine-tuning alters the model's structure.",
+      "Both involve retraining the model, but Prompt Engineering does it more often.",
+      "Prompt Engineering creates input prompts, while Fine-tuning retrains the model on specific data.",
+      "Prompt Engineering adjusts the model's parameters, while Fine-tuning crafts input prompts."
+    ],
+    correct: 2,
+    explain: "Prompt Engineering diseña instrucciones de entrada para guiar el LLM sin modificar sus pesos; es una técnica sin coste de entrenamiento. Fine-tuning actualiza los pesos del modelo reentrenándolo sobre un conjunto de datos específico del dominio, adaptándolo de forma permanente a tareas o vocabularios especializados."
+  },
+  {
+    q: "What is a key advantage of using dedicated AI clusters in the OCI Generative AI service?",
+    options: [
+      "They provide high performance compute resources for fine-tuning tasks.",
+      "They allow access to unlimited database resources.",
+      "They provide faster internet connection speeds.",
+      "They are free of charge for all users."
+    ],
+    correct: 0,
+    explain: "Los dedicated AI clusters en OCI Generative AI proporcionan GPUs de alto rendimiento asignadas exclusivamente al tenant, con latencia predecible y capacidad óptima para tareas computacionalmente intensivas como el fine-tuning de LLM. Garantizan aislamiento de recursos, rendimiento consistente y control total sobre el entorno de entrenamiento."
+  },
+  {
+    q: "Which is NOT a category of pretrained foundational models available in the OCI Generative AI service?",
+    options: [
+      "Translation models",
+      "Generation models",
+      "Chat models",
+      "Embedding models"
+    ],
+    correct: 0,
+    explain: "OCI Generative AI ofrece tres categorías de modelos de base preentrenados: Generation models (para completar y generar contenido), Chat models (para conversación interactiva) y Embedding models (para convertir texto en vectores numéricos). Translation models NO es una categoría independiente dentro del catálogo de OCI Generative AI."
+  },
+  {
+    q: "What does \"fine-tuning\" refer to in the context of OCI Generative AI service?",
+    options: [
+      "Upgrading the hardware of the AI clusters",
+      "Doubling the neural network layers",
+      "Adjusting the model parameters to improve accuracy",
+      "Encrypting the data for security reasons"
+    ],
+    correct: 2,
+    explain: "Fine-tuning en OCI Generative AI es el proceso de reentrenar un modelo base con datos específicos del dominio o la tarea del cliente para adaptar sus parámetros (pesos) y mejorar su precisión en ese contexto. Permite personalizar un LLM de propósito general para que adopte el tono, vocabulario y conocimiento específico de una organización."
+  },
+  {
+    q: "What is the benefit of using embedding models in OCI Generative AI service?",
+    options: [
+      "They simplify managing databases.",
+      "They enable creating detailed graphics.",
+      "They optimize the use of computational resources.",
+      "They facilitate semantic searches."
+    ],
+    correct: 3,
+    explain: "Los Embedding models convierten texto en vectores numéricos de alta dimensión que capturan el significado semántico. Esto permite realizar búsquedas por similitud semántica (encontrar contenido con significado similar aunque use palabras distintas), fundamental para aplicaciones como RAG, búsqueda inteligente y sistemas de recomendación."
+  },
+  {
+    q: "What is \"in-context learning\" in the realm of Large Language Models (LLMs)?",
+    options: [
+      "Training a model on a diverse range of tasks",
+      "Modifying the behavior of a pretrained LLM permanently",
+      "Providing a few examples of a target task via the input prompt",
+      "Teaching a model through zero-shot learning"
+    ],
+    correct: 2,
+    explain: "In-context learning (o few-shot learning) consiste en incluir directamente en el prompt de entrada algunos ejemplos demostrativos de la tarea deseada, sin modificar los pesos del modelo. El modelo infiere el patrón de los ejemplos y lo aplica a la nueva solicitud, adaptando su comportamiento temporalmente sin ningún coste de entrenamiento."
+  },
+  {
+    q: "Which is NOT a capability of OCI Vision's image analysis?",
+    options: [
+      "Translating text in images to another language",
+      "Object detection with bounding boxes",
+      "Assigning classification labels to images",
+      "Locating and extracting text in images"
+    ],
+    correct: 0,
+    explain: "OCI Vision puede clasificar imágenes, detectar objetos con bounding boxes y extraer texto mediante OCR. Sin embargo, NO puede traducir el texto encontrado en imágenes a otro idioma; esa función pertenece a OCI Language. Vision y Language son servicios complementarios pero independientes."
+  },
+  {
+    q: "Which feature is NOT supported as part of the OCI Language service's pretrained language processing capabilities?",
+    options: [
+      "Language Detection",
+      "Sentiment Analysis",
+      "Text Classification",
+      "Text Generation"
+    ],
+    correct: 3,
+    explain: "Las capacidades de inferencia preentrenadas de OCI Language incluyen: Language Detection, Sentiment Analysis, Key Phrase Extraction, Named Entity Recognition (NER) y Text Classification. Text Generation NO es una capacidad preentrenada del servicio OCI Language; para ello se utiliza OCI Generative AI."
+  },
+  {
+    q: "What is the primary benefit of using the OCI Language service for text analysis?",
+    options: [
+      "It provides image processing capabilities.",
+      "It allows for text analysis at scale without machine learning expertise.",
+      "It only works with structured data.",
+      "It requires extensive machine learning expertise to use."
+    ],
+    correct: 1,
+    explain: "OCI Language es un servicio de IA gestionado que expone capacidades de análisis de texto a través de APIs REST, sin que los usuarios necesiten experiencia en ciencia de datos ni en ML. Gestiona toda la infraestructura subyacente y los modelos, permitiendo procesar grandes volúmenes de texto a escala con sencillez."
+  },
+  {
+    q: "You are working on a project for a healthcare organization that wants to develop a system to predict the severity of patients' illnesses upon admission to a hospital. The goal is to classify patients into three categories — Low Risk, Moderate Risk, and High Risk — based on their medical history and vital signs. Which type of supervised learning algorithm is required in this scenario?",
+    options: [
+      "Binary Classification",
+      "Regression",
+      "Multi-Class Classification",
+      "Clustering"
+    ],
+    correct: 2,
+    explain: "Multi-Class Classification asigna cada instancia a una de tres o más clases mutuamente excluyentes. Como el sistema debe clasificar pacientes en tres categorías (Low Risk, Moderate Risk, High Risk), se requiere un clasificador multiclase. Binary Classification solo distingue entre dos clases, Regression predice valores continuos, y Clustering es aprendizaje no supervisado."
+  },
+  {
+    q: "What is the difference between classification and regression in Supervised Machine Learning?",
+    options: [
+      "Classification assigns data points to categories, whereas regression predicts continuous values.",
+      "Classification predicts continuous values, whereas regression assigns data points to categories.",
+      "Classification and regression both predict continuous values.",
+      "Classification and regression both assign data points to categories."
+    ],
+    correct: 0,
+    explain: "En aprendizaje supervisado, Classification predice etiquetas categóricas discretas (spam/no spam, tipo de tumor), mientras que Regression predice valores numéricos continuos (precio de una casa, temperatura). Son las dos tareas fundamentales del aprendizaje supervisado, diferenciadas por el tipo de variable de salida."
+  },
+  {
+    q: "Which AI Ethics principle leads to the Responsible AI requirement of transparency?",
+    options: [
+      "Respect for human autonomy",
+      "Prevention of harm",
+      "Fairness",
+      "Explicability"
+    ],
+    correct: 3,
+    explain: "Explicability exige que las decisiones y razonamientos de los sistemas de IA puedan ser entendidos y justificados de forma comprensible por los humanos. De este principio se deriva el requisito de Transparency en la IA Responsable: los procesos, datos y criterios de los sistemas de IA deben ser abiertos y comprensibles para las partes afectadas."
+  },
+  {
+    q: "How does AI enhance human efforts?",
+    options: [
+      "By completely replacing human workers in all tasks",
+      "By increasing the physical strength of humans",
+      "By deleting data humans need to handle",
+      "By processing data at a speed and effectiveness far beyond human capability"
+    ],
+    correct: 3,
+    explain: "La IA amplifica las capacidades humanas procesando enormes volúmenes de datos a velocidades muy superiores a la capacidad humana, identificando patrones sutiles y extrayendo información relevante de forma automatizada. Actúa como herramienta que potencia la productividad y toma de decisiones humana, especialmente en tareas analíticas a gran escala."
+  },
+  {
+    q: "What is the primary benefit of using Oracle Cloud Infrastructure Supercluster for AI workloads?",
+    options: [
+      "It offers seamless integration with social media platforms.",
+      "It provides a cost-effective solution for simple AI tasks.",
+      "It delivers exceptional performance and scalability for complex AI tasks.",
+      "It is ideal for tasks such as text-to-speech conversion."
+    ],
+    correct: 2,
+    explain: "OCI Supercluster conecta cientos de nodos GPU de alta densidad mediante interconexiones RDMA de baja latencia, ofreciendo el rendimiento y la escalabilidad necesarios para cargas de trabajo de IA extremadamente complejas como el entrenamiento de LLM a gran escala, inferencia de alto rendimiento y simulaciones científicas que requieren cómputo distribuido masivo."
+  }
+];
+</script>
+<script src="exam-engine.js"></script>
+</body>
+</html>
