@@ -546,6 +546,23 @@ header {
   color: var(--text);
 }
 
+/* ============ MULTI-SELECT ============ */
+.multi-hint {
+  font-size: 11px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+  margin-top: -12px;
+}
+.multi-hint strong { color: var(--gold); }
+
+.option-check.selected .option-letter {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
 .hidden { display: none !important; }
 
 @media (max-width: 600px) {

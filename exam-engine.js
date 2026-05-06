@@ -4,10 +4,30 @@
 // EXAM_META shape:
 //   { code, title, heading, description, passPercent, suggestedMinutes, lang }
 //
-// QUESTIONS shape:
+// QUESTIONS shape (single-select):
 //   [{ q, options: string[], correct: number, explain }]
+//
+// QUESTIONS shape (multi-select):
+//   [{ q, options: string[], correct: number[], explain }]
 
 (function () {
+
+  // ============ HELPERS ============
+  const isMulti = q => Array.isArray(q.correct);
+
+  function answerIsCorrect(answer, correct) {
+    if (Array.isArray(correct)) {
+      if (!Array.isArray(answer) || answer.length !== correct.length) return false;
+      return answer.every((v, i) => v === correct[i]);
+    }
+    return answer === correct;
+  }
+
+  function isAnswered(idx) {
+    const q = QUESTIONS[idx];
+    if (isMulti(q)) return state.confirmed[idx];
+    return state.answers[idx] !== null;
+  }
 
   // ============ THEME ============
   // The anti-flicker attribute is set by the inline <script> in <head>.
@@ -42,14 +62,19 @@
   document.getElementById('stat-lang').textContent = EXAM_META.lang;
 
   // ============ STATE ============
-  let state = {
-    mode: 'practice',
-    currentIdx: 0,
-    answers: new Array(QUESTIONS.length).fill(null),
-    startTime: null,
-    timerInterval: null,
-    finished: false
-  };
+  function makeInitialState() {
+    return {
+      mode: 'practice',
+      currentIdx: 0,
+      answers: new Array(QUESTIONS.length).fill(null),    // null | number | number[]
+      pending: QUESTIONS.map(() => new Set()),             // multi-select in-progress selections
+      confirmed: new Array(QUESTIONS.length).fill(false), // multi-select confirmed flag
+      startTime: null,
+      timerInterval: null,
+      finished: false
+    };
+  }
+  let state = makeInitialState();
 
   // ============ ELEMENTS ============
   const $ = id => document.getElementById(id);
@@ -92,6 +117,16 @@
   function renderQuestion() {
     const idx = state.currentIdx;
     const q = QUESTIONS[idx];
+    if (isMulti(q)) {
+      renderMultiQuestion(idx, q);
+    } else {
+      renderSingleQuestion(idx, q);
+    }
+    updateProgress();
+    updateNav();
+  }
+
+  function renderSingleQuestion(idx, q) {
     const userAnswer = state.answers[idx];
     const showFeedback = state.mode === 'practice' && userAnswer !== null;
 
@@ -122,24 +157,93 @@
     `;
 
     questionContainer.querySelectorAll('.option').forEach(btn => {
-      btn.addEventListener('click', () => selectAnswer(parseInt(btn.dataset.idx)));
+      btn.addEventListener('click', () => selectSingle(idx, parseInt(btn.dataset.idx)));
     });
-
-    updateProgress();
-    updateNav();
   }
 
-  function selectAnswer(optionIdx) {
-    const idx = state.currentIdx;
+  function renderMultiQuestion(idx, q) {
+    const confirmed = state.confirmed[idx];
+    const pending = state.pending[idx];
+    const answer = state.answers[idx];
+    const numCorrect = q.correct.length;
+    const showFeedback = state.mode === 'practice' && confirmed;
+    const selectedSet = confirmed ? new Set(answer) : pending;
+
+    questionContainer.innerHTML = `
+      <article class="question-card">
+        <div class="q-num">Pregunta ${String(idx + 1).padStart(2, '0')}</div>
+        <h2 class="q-text">${q.q}</h2>
+        <p class="multi-hint">Selecciona <strong>${numCorrect}</strong> opciones correctas</p>
+        <div class="options" role="group">
+          ${q.options.map((opt, i) => {
+            const sel = selectedSet.has(i);
+            let cls = 'option option-check';
+            if (sel) cls += ' selected';
+            if (confirmed) {
+              cls += ' locked';
+              if (q.correct.includes(i)) cls += ' correct';
+              else if (sel) cls += ' wrong';
+            }
+            const letter = String.fromCharCode(65 + i);
+            return `<button class="${cls}" data-idx="${i}" ${confirmed ? 'disabled' : ''}>
+              <span class="option-letter">${sel && !confirmed ? '✓' : letter}</span>
+              <span>${opt}</span>
+            </button>`;
+          }).join('')}
+        </div>
+        ${!confirmed ? `
+        <div style="margin-top:16px;text-align:center;">
+          <button class="btn btn-primary" id="confirm-multi-btn" ${pending.size < numCorrect ? 'disabled' : ''}>
+            Confirmar selección (${pending.size} / ${numCorrect})
+          </button>
+        </div>` : ''}
+        <div class="feedback ${showFeedback ? 'show' : ''}">
+          <strong>${answerIsCorrect(answer, q.correct) ? '✓ Correcto.' : '✗ Incorrecto.'}</strong> ${q.explain}
+        </div>
+      </article>
+    `;
+
+    if (!confirmed) {
+      questionContainer.querySelectorAll('.option-check').forEach(btn => {
+        btn.addEventListener('click', () => toggleMulti(idx, parseInt(btn.dataset.idx), numCorrect));
+      });
+      const confirmBtn = $('confirm-multi-btn');
+      if (confirmBtn) {
+        confirmBtn.addEventListener('click', () => confirmMulti(idx));
+      }
+    }
+  }
+
+  function selectSingle(idx, optionIdx) {
     if (state.mode === 'practice' && state.answers[idx] !== null) return;
     state.answers[idx] = optionIdx;
+    renderQuestion();
+  }
+
+  function toggleMulti(idx, optionIdx, numCorrect) {
+    const pending = state.pending[idx];
+    if (pending.has(optionIdx)) {
+      pending.delete(optionIdx);
+    } else if (pending.size < numCorrect) {
+      pending.add(optionIdx);
+    }
+    renderMultiQuestion(idx, QUESTIONS[idx]);
+    updateProgress();
+  }
+
+  function confirmMulti(idx) {
+    const q = QUESTIONS[idx];
+    const pending = state.pending[idx];
+    if (pending.size < q.correct.length) return;
+    state.answers[idx] = [...pending].sort((a, b) => a - b);
+    state.confirmed[idx] = true;
     renderQuestion();
   }
 
   function updateProgress() {
     const idx = state.currentIdx;
     const total = QUESTIONS.length;
-    const answered = state.answers.filter(a => a !== null).length;
+    const answered = QUESTIONS.reduce((count, q, i) => count + (isAnswered(i) ? 1 : 0), 0);
     $('progress-text').textContent = `${String(idx + 1).padStart(2, '0')} / ${total}`;
     $('answered-count').textContent = `${answered} respondidas`;
     $('progress-fill').style.right = `${100 - ((idx + 1) / total * 100)}%`;
@@ -176,7 +280,7 @@
       $('finish-btn').textContent = 'Finalizar examen';
       return;
     }
-    const unanswered = state.answers.filter(a => a === null).length;
+    const unanswered = QUESTIONS.reduce((count, q, i) => count + (isAnswered(i) ? 0 : 1), 0);
     if (unanswered > 0) {
       if (!confirm(`Tienes ${unanswered} preguntas sin responder. ¿Finalizar de todos modos?`)) return;
     }
@@ -191,7 +295,9 @@
     resultsScreen.classList.remove('hidden');
     $('finish-btn').textContent = 'Finalizar examen';
 
-    const correctCount = state.answers.filter((a, i) => a === QUESTIONS[i].correct).length;
+    const correctCount = QUESTIONS.reduce((count, q, i) => {
+      return count + (answerIsCorrect(state.answers[i], q.correct) ? 1 : 0);
+    }, 0);
     const percent = Math.round((correctCount / QUESTIONS.length) * 100);
 
     $('score-percent').textContent = `${percent}%`;
@@ -207,11 +313,10 @@
     }
 
     const grid = $('review-grid');
-    grid.innerHTML = QUESTIONS.map((_, i) => {
-      const a = state.answers[i];
+    grid.innerHTML = QUESTIONS.map((q, i) => {
       let cls = 'review-cell';
-      if (a === null) cls += ' skipped';
-      else if (a === QUESTIONS[i].correct) cls += ' correct';
+      if (!isAnswered(i)) cls += ' skipped';
+      else if (answerIsCorrect(state.answers[i], q.correct)) cls += ' correct';
       else cls += ' wrong';
       return `<div class="${cls}" data-idx="${i}">${i + 1}</div>`;
     }).join('');
@@ -242,14 +347,7 @@
   $('restart-btn').addEventListener('click', () => {
     if (!confirm('¿Reiniciar el examen? Se perderán todas las respuestas actuales.')) return;
     clearInterval(state.timerInterval);
-    state = {
-      mode: 'practice',
-      currentIdx: 0,
-      answers: new Array(QUESTIONS.length).fill(null),
-      startTime: null,
-      timerInterval: null,
-      finished: false
-    };
+    state = makeInitialState();
     document.querySelectorAll('.mode-toggle button').forEach(b => b.classList.remove('active'));
     document.querySelector('.mode-toggle button[data-mode="practice"]').classList.add('active');
     $('mode-desc').textContent = 'Modo Práctica: muestra la respuesta correcta después de cada pregunta.';

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examen Oracle 1Z0-1195-25</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="exam-engine.css">
+<script>try{if(localStorage.getItem('oci-theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
+</head>
+<body class="grain">
+<div class="container">
+
+  <header>
+    <div class="brand">
+      <div class="brand-mark">O</div>
+      <div class="brand-text">
+        <div class="meta" id="exam-code">Oracle Certification</div>
+        <h1 id="exam-title">Examen de práctica</h1>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <a href="index.html" class="btn catalog-btn">← Catálogo</a>
+      <button class="theme-btn" id="theme-btn" title="Cambiar tema">🌙</button>
+      <div class="timer hidden" id="timer-box">
+        <div class="label">Tiempo</div>
+        <div class="time" id="timer">00:00</div>
+      </div>
+    </div>
+  </header>
+
+  <section id="start-screen" class="start-screen">
+    <div class="eyebrow">Examen de práctica</div>
+    <h2 id="exam-heading">Cargando&hellip;</h2>
+    <p class="sub" id="exam-description"></p>
+    <div class="stats-grid">
+      <div class="stat"><div class="stat-num" id="stat-questions">—</div><div class="stat-label">Preguntas</div></div>
+      <div class="stat"><div class="stat-num" id="stat-minutes">—</div><div class="stat-label">Min sugerido</div></div>
+      <div class="stat"><div class="stat-num" id="stat-pass">—</div><div class="stat-label">Para aprobar</div></div>
+      <div class="stat"><div class="stat-num" id="stat-lang">ES</div><div class="stat-label">Idioma</div></div>
+    </div>
+    <div class="mode-toggle" role="group">
+      <button class="active" data-mode="practice">Práctica</button>
+      <button data-mode="exam">Examen</button>
+    </div>
+    <p class="sub" style="margin-top:0;font-size:12px;">
+      <span id="mode-desc">Modo Práctica: muestra la respuesta correcta después de cada pregunta.</span>
+    </p>
+    <button class="btn btn-primary" id="start-btn" style="margin-top:20px;">Comenzar examen →</button>
+  </section>
+
+  <section id="quiz-screen" class="hidden">
+    <div class="progress-wrap">
+      <span class="progress-text" id="progress-text">01 / 40</span>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <span class="progress-text" id="answered-count">0 respondidas</span>
+    </div>
+    <div id="question-container"></div>
+    <div class="nav">
+      <button class="btn" id="prev-btn">← Anterior</button>
+      <button class="btn" id="finish-btn">Finalizar examen</button>
+      <button class="btn btn-primary" id="next-btn">Siguiente →</button>
+    </div>
+  </section>
+
+  <section id="results-screen" class="hidden results">
+    <div class="eyebrow" style="color:var(--accent);letter-spacing:.25em;font-size:11px;text-transform:uppercase;margin-bottom:12px;">Resultados</div>
+    <div class="score-display" id="score-percent">0%</div>
+    <div class="score-fraction" id="score-fraction">0 / 40 correctas</div>
+    <div class="score-verdict" id="verdict">—</div>
+    <div class="legend">
+      <span><span class="legend-dot correct"></span>Correcta</span>
+      <span><span class="legend-dot wrong"></span>Incorrecta</span>
+      <span><span class="legend-dot skipped"></span>Sin responder</span>
+    </div>
+    <div class="review-grid" id="review-grid"></div>
+    <p class="sub" style="font-size:12px;color:var(--text-muted);max-width:420px;margin:0 auto 28px;">
+      Haz clic en cualquier pregunta para revisarla.
+    </p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn" id="review-btn">Revisar respuestas</button>
+      <button class="btn btn-gold" id="restart-btn">Reiniciar examen</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const EXAM_META = {
+  code: '1Z0-1195-25',
+  title: 'Oracle Data Platform Foundation Associate',
+  heading: 'Oracle Data Platform<br><em>Foundation</em> Associate',
+  description: 'Examen interactivo de 40 preguntas basado en el examen oficial Oracle Data Platform 2025 Foundation Associate (1Z0-1195-25). Incluye preguntas de selección única y selección múltiple. Selecciona el modo de estudio: práctica con retroalimentación inmediata o examen cronometrado.',
+  passPercent: 65,
+  suggestedMinutes: 75,
+  lang: 'ES'
+};
+
+const QUESTIONS = [
+  {
+    q: "¿Qué medida de seguridad está implementada de forma predeterminada e incluida si no está usando licencias BYOL con Exadata Cloud@Customer?",
+    options: [
+      "Oracle Key Vault",
+      "Audit Vault y Database Firewall",
+      "Oracle Native Network Encryption y TDE (Transparent Data Encryption)",
+      "Database Vault y Data Masking Pack"
+    ],
+    correct: 2,
+    explain: "Oracle Native Network Encryption (NNE) y TDE (Transparent Data Encryption) son las medidas de seguridad incluidas de forma predeterminada en Exadata Cloud@Customer cuando no se utiliza licencia BYOL. NNE protege los datos en tránsito cifrando el tráfico de red entre el cliente y la base de datos sin necesidad de SSL/TLS. TDE protege los datos en reposo cifrando automáticamente los datos almacenados en disco sin cambios en la aplicación. Ambas están activas por defecto sin costo adicional de licencia. Oracle Key Vault, Audit Vault, Database Vault y Data Masking Pack son productos separados que requieren licenciamiento adicional."
+  },
+  {
+    q: "¿Cuáles dos afirmaciones son verdaderas al decidir en qué región de OCI registrar una infraestructura de Exadata Cloud@Customer?",
+    options: [
+      "Considere la proximidad física de la región en la que registra la infraestructura a su centro de datos.",
+      "Considere cualquier política empresarial o regulación que impida el uso de una región particular.",
+      "La región de Exadata Cloud@Customer puede cambiarse después de crear la infraestructura.",
+      "Considere qué dominio de disponibilidad (dentro de la región) usar para crear la infraestructura de Exadata Cloud@Customer.",
+      "Exadata Cloud@Customer está alojado en el data center del cliente, por lo que la infraestructura de Exadata no se registra en una región de OCI."
+    ],
+    correct: [0, 1],
+    explain: "Al registrar Exadata Cloud@Customer en una región de OCI, dos factores son críticos: (1) Proximidad física — aunque el hardware está en el data center del cliente, la región de OCI controla dónde se ejecuta el plano de control y gestión; una región lejana puede implicar mayor latencia en las operaciones de gestión. (2) Políticas y regulaciones — algunas industrias y países tienen requisitos de soberanía de datos que prohíben procesar datos de gestión en ciertas jurisdicciones. La región NO puede cambiarse después de crear la infraestructura (es permanente). La elección del dominio de disponibilidad no aplica para ExaC@C ya que el hardware está en las instalaciones del cliente."
+  },
+  {
+    q: "¿Cuál es la ÚLTIMA versión que admite la arquitectura non-CDB?",
+    options: [
+      "Oracle Database 23c",
+      "Oracle Database 21c",
+      "Oracle Database 18c",
+      "Oracle Database 19c"
+    ],
+    correct: 3,
+    explain: "Oracle Database 19c es la última versión que soporta la arquitectura non-CDB (non-Container Database), es decir, bases de datos tradicionales sin arquitectura multitenant. A partir de Oracle Database 21c, Oracle eliminó el soporte a non-CDB, siendo obligatoria la arquitectura CDB (Container Database) con PDBs (Pluggable Databases). Oracle Database 19c es también una versión de soporte a largo plazo (LTS) hasta 2027 con soporte extendido hasta 2030, lo que la convierte en la versión de migración recomendada para quienes aún usen arquitecturas non-CDB antes de adoptar multitenant."
+  },
+  {
+    q: "¿Cuáles son dos razones importantes para actualizar y aplicar parches?",
+    options: [
+      "Validación de la aplicación",
+      "Reestructurar la base de datos",
+      "Cumplimiento de soporte",
+      "Seguridad"
+    ],
+    correct: [2, 3],
+    explain: "Hay dos razones fundamentales para mantener actualizadas y parchadas las bases de datos Oracle: (1) Seguridad — los parches cierran vulnerabilidades conocidas que podrían ser explotadas por atacantes. Oracle publica Critical Patch Updates (CPU) trimestralmente para corregir vulnerabilidades de seguridad. (2) Cumplimiento de soporte — Oracle solo brinda soporte técnico completo a versiones dentro del ciclo de soporte activo. Ejecutar versiones fuera de soporte puede violar requisitos de auditoría y regulaciones como PCI-DSS o HIPAA. La validación de aplicaciones y la reestructuración de la base de datos son actividades relacionadas con upgrades, no razones primarias para parchear."
+  },
+  {
+    q: "¿Cuándo debe cambiar el parámetro COMPATIBLE?",
+    options: [
+      "Después de degradaciones de la base de datos",
+      "Después de upgrades",
+      "Después de parchear",
+      "Cuando la base de datos está detenida"
+    ],
+    correct: 2,
+    explain: "El parámetro COMPATIBLE en Oracle Database controla qué características de la versión actual están disponibles y garantiza la compatibilidad con versiones anteriores. Se debe cambiar después de aplicar parches (patches), NO inmediatamente al hacer un upgrade. El motivo: después de aplicar un patch, primero debe verificar que todo funcione correctamente. Si descubre problemas, podría necesitar hacer un downgrade — y si ya cambió COMPATIBLE a la nueva versión, el downgrade ya no sería posible porque pueden haberse activado características incompatibles con la versión anterior. Por ello, Oracle recomienda verificar la estabilidad del sistema antes de modificar COMPATIBLE."
+  },
+  {
+    q: "¿Cuál es el objetivo principal de Oracle Maximum Availability Architecture (MAA) para los sistemas de los clientes?",
+    options: [
+      "Protección de datos, acceso e informes",
+      "Disponibilidad continua, seguridad de red y failover",
+      "Replicación activa, protección de datos y disponibilidad continua",
+      "Escalabilidad horizontal, disponibilidad de aplicaciones y protección"
+    ],
+    correct: 2,
+    explain: "Oracle Maximum Availability Architecture (MAA) es el conjunto de mejores prácticas, configuraciones y referencias de arquitectura de Oracle para lograr la máxima disponibilidad. Sus tres pilares fundamentales son: (1) Replicación activa — uso de tecnologías como Data Guard (standby sincrónico o asíncrono), GoldenGate (replicación bidireccional) y RAC (Real Application Clusters) para mantener copias activas de los datos; (2) Protección de datos — backups automáticos con RMAN, flashback technologies para recuperación rápida ante pérdida de datos; (3) Disponibilidad continua — RTO (Recovery Time Objective) y RPO (Recovery Point Objective) cercanos a cero, failover automático transparente para las aplicaciones."
+  },
+  {
+    q: "¿Qué carga de trabajo NO puede ejecutarse en Oracle Database 19c?",
+    options: [
+      "Clústeres Hadoop",
+      "Translytical",
+      "Machine Learning",
+      "Gaming"
+    ],
+    correct: 0,
+    explain: "Oracle Database 19c es una base de datos convergente que soporta múltiples tipos de cargas de trabajo: Translytical (OLTP + Analytics simultáneamente con HTAP), Machine Learning (Oracle Machine Learning, OML), Gaming (transacciones OLTP de alta velocidad), JSON, Graph, Spatial, y más. Lo que Oracle Database 19c NO puede ejecutar son Clústeres Hadoop nativos — Hadoop es un ecosistema de procesamiento distribuido de datos no estructurados (HDFS, MapReduce, YARN) que requiere su propio cluster de nodos. Oracle interopera con Hadoop a través de Oracle Big Data Service y conectores, pero la base de datos en sí no es un clúster Hadoop."
+  },
+  {
+    q: "Oracle Automated Machine Learning (AutoML) tiene opciones para usar algoritmos en base de datos y open source. ¿Cuál es un ejemplo de opción en base de datos?",
+    options: [
+      "Interfaz REST",
+      "Oracle Machine Learning para Python (OML4Py) APIs",
+      "Ajuste de hiperparámetros",
+      "Texto cognitivo"
+    ],
+    correct: 1,
+    explain: "Oracle AutoML permite acceder a algoritmos de ML de dos formas: (1) En base de datos (in-database): Oracle Machine Learning for Python (OML4Py) proporciona APIs de Python que ejecutan algoritmos directamente dentro de Oracle Database, aprovechando la infraestructura de la base de datos sin mover los datos. También incluye OML4R (para R) y OML4SQL. (2) Open source: algoritmos de scikit-learn, TensorFlow, PyTorch que se ejecutan fuera de la base de datos. OML4Py es la opción in-database porque los modelos y el procesamiento viven dentro del motor de base de datos, maximizando rendimiento y seguridad. El ajuste de hiperparámetros y la interfaz REST son componentes del framework, no opciones in-database específicas."
+  },
+  {
+    q: "¿Qué servicio de OCI NO está disponible para aprovisionamiento en su tenancy como recurso Always Free?",
+    options: [
+      "Block Volume (hasta 100 GB de almacenamiento total)",
+      "Autonomous Database (hasta dos instancias de base de datos)",
+      "Load Balancing (un equilibrador de carga)",
+      "Fast Connect (1 Gbps peering público)"
+    ],
+    correct: 3,
+    explain: "OCI Always Free ofrece un conjunto de recursos sin costo y sin límite de tiempo. Los recursos Always Free incluyen: 2 instancias Autonomous Database (ATP o ADW, hasta 20 GB cada una), 2 instancias de Compute AMD, Block Volume hasta 200 GB total, Object Storage 20 GB, 1 Load Balancer flexible (10 Mbps), y más. Fast Connect (conexión privada dedicada entre on-premises y OCI de 1 Gbps o más) NO es un recurso Always Free — es un servicio de conectividad premium con facturación por puerto y ancho de banda. Fast Connect requiere hardware físico en instalaciones de peering y tiene costos significativos de aprovisionamiento."
+  },
+  {
+    q: "¿Qué conjunto de APIs de estilo NoSQL se puede usar en Autonomous JSON Database?",
+    options: [
+      "SODA (Simple Oracle Document Access)",
+      "OASD (Oracle Application Storage Definition)",
+      "DOSA (Document Open Solution Access)",
+      "OSDA (Oracle Simple Document Access)"
+    ],
+    correct: 0,
+    explain: "SODA (Simple Oracle Document Access) es el conjunto de APIs de estilo NoSQL de Oracle que permite trabajar con colecciones de documentos JSON sin necesidad de escribir SQL. SODA está disponible en Autonomous JSON Database y otras ediciones de Oracle Database. Con SODA se pueden realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre documentos JSON usando APIs disponibles para Java, Python, Node.js, REST y PL/SQL. SODA almacena los documentos en tablas Oracle internamente pero expone una interfaz de colección de documentos similar a MongoDB. Las opciones B, C y D son acrónimos inventados que no existen en el ecosistema Oracle."
+  },
+  {
+    q: "¿Qué sentencia puede ser detectada por el monitoreo de acceso a datos sensibles?",
+    options: [
+      "SELECT * from EMPLOYEES;",
+      "SELECT SYSDATE from DUAL;",
+      "UPDATE quarter_reference set Q1='012022'",
+      "CREATE index emp_id_idx on EMPLOYEES(emp_id);"
+    ],
+    correct: 0,
+    explain: "El monitoreo de acceso a datos sensibles (implementado por Oracle Audit Vault and Database Firewall o políticas de auditoría de Oracle Database) detecta consultas que acceden a tablas o columnas marcadas como contenedoras de datos sensibles. SELECT * from EMPLOYEES accede a toda la tabla EMPLOYEES, que típicamente contiene datos personales sensibles como nombres, salarios, números de identificación e información de contacto. Las otras sentencias no acceden a datos de negocio sensibles: SELECT SYSDATE from DUAL consulta solo la fecha del sistema, UPDATE quarter_reference modifica datos de referencia de períodos contables (no datos personales), y CREATE index opera sobre la estructura del índice sin exponer datos sensibles."
+  },
+  {
+    q: "¿Qué significa ORDS?",
+    options: [
+      "Oracle Rapid Data Systems",
+      "Oracle REAP Diagnosis Systems",
+      "Oracle REST Data Services",
+      "Oracle Resilient Data Security"
+    ],
+    correct: 2,
+    explain: "ORDS significa Oracle REST Data Services. Es un middleware de Oracle que expone datos y lógica de Oracle Database a través de interfaces REST HTTP/HTTPS estándar. Con ORDS se pueden: habilitar REST automáticamente sobre tablas, vistas y procedimientos almacenados; publicar APIs REST seguras desde PL/SQL; desarrollar aplicaciones APEX (Oracle APEX depende de ORDS para su capa web); y conectar herramientas de terceros a Oracle Database sin drivers JDBC/ODBC. ORDS está incluido gratuitamente en Autonomous Database y disponible para descarga gratuita para bases de datos on-premises. Las otras opciones (Rapid Data Systems, REAP Diagnosis, Resilient Data Security) no existen como productos Oracle."
+  },
+  {
+    q: "¿Cuál NO es una opción en Database Actions para cargar datos en Autonomous Database?",
+    options: [
+      "Cargar datos desde un archivo local (texto o Excel)",
+      "Cargar datos desde almacenamiento en la nube (Oracle, S3, Azure, Google)",
+      "Cargar datos usando FTP",
+      "Cargar datos desde una base de datos remota",
+      "Cargar datos usando Data Pump"
+    ],
+    correct: 2,
+    explain: "Database Actions en Autonomous Database ofrece múltiples métodos de carga de datos: desde archivos locales (CSV, Excel, JSON, Parquet), desde almacenamiento en la nube (OCI Object Storage, Amazon S3, Azure Blob, Google Cloud Storage), desde bases de datos remotas (mediante conexión JDBC) y mediante Data Pump (impdp para importar dumps). FTP (File Transfer Protocol) NO es una opción de carga de datos en Database Actions. FTP es un protocolo de transferencia de archivos antiguo que Oracle Database no soporta directamente como mecanismo de carga. Para transferir archivos a Autonomous Database se utilizan las opciones mencionadas anteriormente o DBMS_CLOUD."
+  },
+  {
+    q: "¿Cuáles son dos características de Oracle SQLcl (SQL Developer Command Line)?",
+    options: [
+      "Disponible en OCI Cloud Shell por defecto",
+      "Capacidad de ejecutar archivos SQL por lotes",
+      "Crea entornos de desarrollo aislados",
+      "Realiza seguimiento de cambios de esquema de base de datos"
+    ],
+    correct: [0, 1],
+    explain: "Oracle SQLcl (SQL Developer Command Line) es un cliente de línea de comandos moderno y gratuito para Oracle Database. Dos características destacadas: (1) Disponible en OCI Cloud Shell por defecto — Oracle incluyó SQLcl en OCI Cloud Shell sin necesidad de instalación adicional, permitiendo conectarse a bases de datos OCI directamente desde el navegador; (2) Ejecución de archivos SQL por lotes — puede ejecutar scripts SQL, scripts SQLPlus y scripts Liquibase (.xml, .yaml) desde la línea de comandos. SQLcl también incluye soporte para Liquibase (gestión de cambios de esquema), pero esto es una característica de Liquibase integrado en SQLcl, no de SQLcl en sí. La creación de entornos de desarrollo aislados no es una función de SQLcl."
+  },
+  {
+    q: "¿Qué información se requiere para conectarse al NoSQL Database Cloud Service?",
+    options: [
+      "ID de usuario, ID de tenancy, ID de componente",
+      "Huella de clave de firma, clave de firma de API, OCID de tenancy",
+      "Clave de firma de API, ID de administrador, ID de usuario",
+      "ID de tenancy, contraseña, clave de handshake"
+    ],
+    correct: 1,
+    explain: "Para conectarse a Oracle NoSQL Database Cloud Service desde una aplicación, se requieren tres elementos de autenticación basados en OCI: (1) Huella de clave de firma (Signing Key Fingerprint) — identificador único de la clave pública registrada en OCI IAM; (2) Clave de firma de API (API Signing Key) — clave privada RSA que corresponde a la clave pública registrada, usada para firmar las solicitudes HTTP; (3) OCID de Tenancy — identificador único de la tenancy de OCI donde está el servicio NoSQL. No se utilizan contraseñas simples, IDs de componentes (que no existen en OCI) ni claves de handshake. OCI utiliza firma de solicitudes HTTP para autenticación, no usuario/contraseña."
+  },
+  {
+    q: "¿Qué capacidad de OCI Identity and Access Management (IAM) le ayuda a organizar múltiples usuarios en equipos?",
+    options: [
+      "Políticas",
+      "Usuarios",
+      "Roles",
+      "Grupos"
+    ],
+    correct: 0,
+    explain: "En OCI IAM, las Políticas (Policies) son el mecanismo central que permite organizar y gobernar equipos de usuarios. Una política es una sentencia que concede permisos a grupos de usuarios para actuar sobre recursos específicos. La organización en equipos funcionales se logra definiendo políticas que asignan permisos según el rol del equipo: el equipo de desarrollo tiene políticas para gestionar recursos de desarrollo, el equipo de operaciones tiene políticas para gestionar producción, etc. Las políticas son el componente que vincula la identidad de los usuarios con los recursos que pueden gestionar, siendo el núcleo del modelo de control de acceso de OCI."
+  },
+  {
+    q: "Un cliente busca migrar copias de seguridad antiguas de su base de datos desde su data center on-premises a OCI. ¿Qué servicio de OCI es el más rentable?",
+    options: [
+      "Archive Storage",
+      "File Storage",
+      "Block Volume",
+      "Object Storage (estándar)"
+    ],
+    correct: 0,
+    explain: "Para migrar backups históricos de bases de datos a OCI, Archive Storage es la opción más rentable. Archive Storage (nivel Archivo de OCI Object Storage) tiene el costo por GB más bajo de todos los servicios de almacenamiento de OCI, diseñado específicamente para datos raramente accedidos. Los backups históricos se acceden con muy poca frecuencia (solo en casos de recuperación ante desastre o auditoría), lo que los hace candidatos ideales para Archive Storage. La contrapartida es un tiempo de restauración de 1-12 horas antes de poder descargar los datos. Object Storage estándar es más caro al tener acceso inmediato. Block Volume y File Storage son más costosos y están diseñados para datos de acceso frecuente, no para archivo de backups."
+  },
+  {
+    q: "Un cliente quiere usar OCI para almacenar backups de aplicaciones que pueden guardarse por meses, pero recuperarse inmediatamente según las necesidades del negocio. ¿Qué servicio de almacenamiento de OCI satisface este requisito?",
+    options: [
+      "Archive Storage",
+      "Object Storage (estándar)",
+      "Block Volume",
+      "File Storage"
+    ],
+    correct: 1,
+    explain: "El requisito clave es 'recuperarse inmediatamente' (acceso instantáneo), lo que elimina Archive Storage (requiere restauración de 1-12 horas). Object Storage estándar proporciona: acceso inmediato sin tiempo de espera, alta durabilidad (11 nines = 99.999999999%), almacenamiento de objetos para cualquier tipo de archivo, escalabilidad ilimitada, y es más económico que Block Volume o File Storage para almacenamiento masivo. Es la opción ideal para backups de aplicaciones que se retienen por meses pero que deben estar disponibles de inmediato cuando se necesiten. Block Volume y File Storage son más costosos y están diseñados para datos con acceso frecuente adjuntos a instancias de cómputo, no para repositorios de backups."
+  },
+  {
+    q: "¿Cuáles son dos beneficios principales de Oracle APEX?",
+    options: [
+      "Desarrollar, personalizar y entregar aplicaciones seguras rápidamente",
+      "Mayor tiempo de desarrollo usando código a mano",
+      "Almacenar datos en objetos PL/SQL",
+      "Desarrollar aplicaciones web responsivas",
+      "Menor productividad comparada con el código manual"
+    ],
+    correct: [0, 3],
+    explain: "Oracle APEX (Application Express) es una plataforma de desarrollo low-code para Oracle Database. Sus dos beneficios principales son: (1) Desarrollar, personalizar y entregar aplicaciones seguras rápidamente — APEX permite crear aplicaciones completas con formularios, reportes, dashboards y gráficos con mínimo código, reduciendo el tiempo de desarrollo hasta 20 veces comparado con programación tradicional; (2) Desarrollar aplicaciones web responsivas — APEX genera automáticamente interfaces web adaptadas a dispositivos móviles, tablets y escritorio sin configuración adicional, usando el framework Universal Theme. APEX incrementa significativamente la productividad comparado con el código manual. Los datos se almacenan en tablas relacionales de Oracle Database, no en objetos PL/SQL."
+  },
+  {
+    q: "Exadata es la integración de software y hardware y está disponible para clientes en ¿cuáles deployments?",
+    options: [
+      "Solo en el sitio del cliente",
+      "Solo en una nube híbrida",
+      "En Oracle Cloud y el sitio del cliente",
+      "Solo en entornos de nube pública"
+    ],
+    correct: 2,
+    explain: "Oracle Exadata está disponible en dos modalidades de despliegue: (1) En Oracle Cloud (Oracle Exadata Database Service) — servicio gestionado en la infraestructura de Oracle Cloud, con variantes como Exadata Database Service on Dedicated Infrastructure (X9M/X8M) y Exadata Database Service on Exascale Infrastructure; (2) En el sitio del cliente — Exadata Cloud@Customer (hardware Exadata con plano de control en OCI) y Exadata on-premises completamente administrado por el cliente. Esta dualidad es la propuesta de valor de Exadata: misma plataforma integrada de software y hardware disponible tanto en la nube pública de Oracle como en instalaciones del cliente."
+  },
+  {
+    q: "Oracle ExaC@C lleva Oracle Cloud al data center del cliente. La infraestructura de Oracle Cloud es la misma, pero las responsabilidades se ajustan para que el cliente pueda realizar ¿cuáles dos tareas?",
+    options: [
+      "Permitir conexiones de red en la nube pública de Oracle",
+      "Permitir solo al personal de Oracle realizar el control de acceso",
+      "El Control de Acceso de Operador puede terminar las conexiones del operador de Oracle",
+      "El acceso seguro se configura para la red del cliente"
+    ],
+    correct: [2, 3],
+    explain: "Oracle Exadata Cloud@Customer (ExaC@C) instala el hardware Exadata en el data center del cliente, pero Oracle gestiona el software, las actualizaciones y el soporte. Dos capacidades que el cliente tiene en ExaC@C: (1) Operator Access Control (OAC) — el cliente puede controlar, monitorear y terminar las conexiones de los ingenieros de soporte de Oracle cuando acceden al sistema para mantenimiento, proporcionando visibilidad total de qué hacen los operadores de Oracle; (2) Acceso seguro configurado para la red del cliente — el tráfico de control permanece en la red del cliente, con el cliente controlando qué conexiones se permiten hacia su infraestructura ExaC@C. Esto da al cliente soberanía sobre el acceso a su hardware en sus propias instalaciones."
+  },
+  {
+    q: "El lado de oferta (Supply Side) son datos que son pasivos y tienen significado. ¿Qué dos modelos y bibliotecas están incluidos en el lado de oferta?",
+    options: [
+      "Reportes",
+      "Reglas de negocio",
+      "Definiciones técnicas de términos de negocio",
+      "Objetos de dominio"
+    ],
+    correct: [1, 3],
+    explain: "En el contexto de Oracle Data Management y arquitecturas empresariales de datos, el 'Supply Side' (lado de oferta) se refiere al componente semántico y de modelado que da significado a los datos — son los datos en reposo que codifican el conocimiento del negocio. Incluye: (1) Reglas de negocio (Business rules) — lógica y restricciones que gobiernan cómo se procesan y validan los datos según las políticas empresariales; (2) Objetos de dominio (Domain objects) — representaciones semánticas de las entidades del negocio (cliente, producto, pedido) con sus atributos y relaciones. Los reportes son salidas del consumo de datos, no parte del supply side. Las definiciones técnicas son metadatos de implementación, distintos de los objetos de dominio de negocio."
+  },
+  {
+    q: "¿Qué conexiones a múltiples nubes públicas se proporcionan a través de conectividad de terceros?",
+    options: [
+      "Megaport Cloud Router (MCR) y Virtual Cross Connect (VXC)",
+      "Layer 3 y FastConnect",
+      "FastConnect y Direct Connect",
+      "Virtual Cloud Networks (VCN) y Amazon Virtual Private Cloud (VPC)"
+    ],
+    correct: 0,
+    explain: "Para conectividad multicloud a través de terceros, Oracle se asocia con proveedores de intercambio de red como Megaport. Megaport Cloud Router (MCR) — dispositivo virtual de enrutamiento en la red de Megaport que permite interconectar múltiples proveedores de nube (OCI, AWS, Azure, Google Cloud) a través de una red privada sin pasar por Internet pública. Virtual Cross Connect (VXC) — conexión virtual punto a punto entre dos endpoints en la red de Megaport (ej: del data center del cliente a OCI, o de OCI a AWS). Juntos, MCR + VXC permiten arquitecturas multicloud privadas de baja latencia. FastConnect y Direct Connect son los servicios de conectividad dedicada de OCI y AWS respectivamente, no servicios de terceros de interconexión multicloud."
+  },
+  {
+    q: "Oracle Cloud y Microsoft Azure tienen una interconexión para cargas de trabajo entre nubes. ¿Cuáles dos son beneficios que esta asociación e interconexión proporcionan?",
+    options: [
+      "Cumplimiento de actualización",
+      "Baja latencia",
+      "Gestión unificada de identidad y acceso",
+      "Conexión a otros entornos multicloud"
+    ],
+    correct: [1, 2],
+    explain: "La interconexión Oracle Cloud - Microsoft Azure (Oracle Interconnect for Azure) es una conexión privada de alta velocidad entre data centers de OCI y Azure ubicados en las mismas ciudades. Dos beneficios clave: (1) Baja latencia — la interconexión física directa entre los data centers de Oracle y Azure en la misma área metropolitana proporciona latencia de menos de 2 ms, comparable a la red interna, ideal para aplicaciones Oracle (base de datos) en OCI con front-end en Azure; (2) Gestión unificada de identidad y acceso — la integración permite usar Azure Active Directory / Microsoft Entra ID como proveedor de identidad para OCI, simplificando la administración de acceso a recursos en ambas nubes con un único sistema de identidad. No incluye conexión automática a otras nubes multicloud ni cumplimiento de actualización."
+  },
+  {
+    q: "¿Qué característica le permite agrupar y aislar lógicamente sus recursos de Oracle Cloud Infrastructure?",
+    options: [
+      "Tenancy",
+      "Compartimentos",
+      "Grupos de Identity and Access Management",
+      "Dominio de disponibilidad"
+    ],
+    correct: 1,
+    explain: "Los Compartimentos (Compartments) son la característica de OCI que permite agrupar y aislar lógicamente recursos. Un compartimento es un contenedor lógico que puede contener recursos de OCI (VMs, bases de datos, redes, almacenamiento, etc.) y tiene las siguientes propiedades: es global (aplica en todas las regiones), se puede anidar hasta 6 niveles de profundidad, tiene políticas IAM específicas para controlar el acceso, y permite ver el uso y costo por compartimento. La Tenancy es el contenedor raíz de toda la organización en OCI. Los Grupos de IAM organizan usuarios, no recursos. Los Dominios de disponibilidad son unidades geográficas de infraestructura física, no contenedores lógicos de recursos."
+  },
+  {
+    q: "¿Cuáles dos métodos puede usar para crear o modificar recursos de OCI?",
+    options: [
+      "OCI REST APIs",
+      "Remote Desktop Protocol (RDP)",
+      "Secure Shell (SSH)",
+      "OCI Command-line Interface (CLI)",
+      "Serial console connection (SCC)"
+    ],
+    correct: [0, 3],
+    explain: "Oracle Cloud Infrastructure ofrece múltiples interfaces para gestionar recursos, de las cuales dos son herramientas de gestión directa: (1) OCI REST APIs — conjunto completo de APIs REST que permiten automatizar la creación, modificación y eliminación de recursos OCI usando cualquier lenguaje de programación con soporte HTTP. Toda la consola web de OCI usa estas mismas APIs internamente; (2) OCI Command-line Interface (CLI) — herramienta de línea de comandos oficial de Oracle que envuelve las REST APIs para uso interactivo o en scripts de automatización. RDP (acceso de escritorio remoto a Windows VMs) y SSH (acceso al SO de instancias) son métodos de acceso a instancias, no de gestión de recursos OCI. La conexión de consola serial tampoco es un método de gestión de recursos OCI."
+  },
+  {
+    q: "¿Cuál NO es una carga de trabajo que se puede seleccionar al aprovisionar una Autonomous Database?",
+    options: [
+      "Data Warehouse",
+      "MySQL",
+      "APEX",
+      "JSON"
+    ],
+    correct: 1,
+    explain: "Al aprovisionar una Autonomous Database en OCI, se puede seleccionar entre las siguientes cargas de trabajo: Data Warehouse (ADW) — optimizado para consultas analíticas y reportes; Transaction Processing (ATP) — optimizado para OLTP de alta velocidad; JSON Database — optimizado para desarrollo de aplicaciones con documentos JSON y APIs SODA; APEX — optimizado para desarrollo de aplicaciones low-code con Oracle APEX. MySQL NO es una opción de Autonomous Database — MySQL es un motor de base de datos diferente, adquirido por Oracle pero independiente de Oracle Database. Autonomous Database siempre está basado en Oracle Database. Para MySQL en OCI existe el servicio separado 'MySQL Database Service' con HeatWave."
+  },
+  {
+    q: "¿Cómo ayuda la Converged Database a acceder a los datos mediante una API?",
+    options: [
+      "Se genera automáticamente una API REST sobre SQL o procedimientos almacenados",
+      "Cada base de datos viene con una instancia de cómputo habilitada para REST para proporcionar acceso a datos",
+      "La base de datos proporciona solo una interfaz REST universal que hace que la integración de aplicaciones sea extremadamente ágil",
+      "Los desarrolladores pueden apuntar su aplicación a la ubicación del ADB Wallet que integra todas las llamadas REST API"
+    ],
+    correct: 0,
+    explain: "Oracle Converged Database, a través de ORDS (Oracle REST Data Services), puede generar automáticamente APIs REST sobre tablas, vistas y procedimientos almacenados de Oracle Database con un solo comando o clic en Database Actions. Al hacer 'REST Enable' una tabla, ORDS expone automáticamente endpoints REST para CRUD (GET para consultar, POST para insertar, PUT/PATCH para actualizar, DELETE para eliminar) sin escribir código adicional. También se pueden publicar APIs REST personalizadas sobre procedimientos PL/SQL. Esta capacidad elimina la necesidad de una capa de middleware separada para exponer datos de la base de datos a aplicaciones modernas. No se necesita una instancia de cómputo separada — ORDS puede ejecutarse dentro de Autonomous Database."
+  },
+  {
+    q: "¿Qué herramienta se proporciona para soportar flujos de trabajo de Integración Continua/Entrega Continua (CI/CD)?",
+    options: [
+      "SQLcl (incluyendo Liquibase)",
+      "Database Actions (incluyendo monitor SQL en tiempo real)",
+      "Consola ADB (incluyendo Performance Hub)",
+      "SQL Developer (incluyendo ADB wallet)"
+    ],
+    correct: 0,
+    explain: "SQLcl con Liquibase integrado es la herramienta recomendada por Oracle para soportar flujos de trabajo CI/CD en bases de datos Oracle. Liquibase es una herramienta de código abierto para gestión de cambios de esquema de base de datos — permite versionar, rastrear y aplicar cambios de DDL (CREATE TABLE, ALTER TABLE, etc.) de forma controlada y repetible, similar a Git para código fuente. SQLcl incluye soporte nativo para Liquibase, permitiendo generar changelogs automáticamente desde cambios de esquema Oracle y aplicarlos en pipelines CI/CD (Jenkins, GitHub Actions, GitLab CI). Database Actions y Performance Hub son herramientas de monitoreo y desarrollo interactivo, no de pipeline de CI/CD."
+  },
+  {
+    q: "¿Cuáles tres tipos de datos/modelos típicos están cubiertos por la Converged Database de Oracle?",
+    options: [
+      "Terraform",
+      "Graph",
+      "Notificaciones",
+      "Relacional",
+      "Imágenes",
+      "Espacial",
+      "Eventos"
+    ],
+    correct: [1, 3, 5],
+    explain: "Oracle Converged Database es una base de datos multi-modelo que elimina la necesidad de múltiples bases de datos especializadas. Soporta múltiples tipos de datos y modelos en una sola plataforma: (1) Relacional — modelo tabular tradicional con SQL completo (OLTP, OLAP); (2) Graph — Oracle Property Graph para análisis de relaciones entre entidades (detección de fraude, redes sociales, recomendaciones); (3) Espacial (Spatial) — datos geoespaciales con Oracle Spatial and Graph para análisis de localización y mapas. También soporta JSON, XML, Blockchain Tables, Machine Learning in-database y Text (búsqueda de texto completo). Terraform es una herramienta de infraestructura como código (no un tipo de dato). Notificaciones, Imágenes y Eventos son conceptos de otras áreas, no modelos de datos de la Converged Database."
+  },
+  {
+    q: "¿Cuál afirmación es verdadera sobre MySQL Database Service?",
+    options: [
+      "Es un servicio nativo de OCI totalmente gestionado",
+      "Sus usuarios son responsables de las tareas de parchado de base de datos y sistema operativo",
+      "Soporta MySQL Enterprise Edition versión 5.7 con InnoDB Storage Engine",
+      "Es un servicio de nube pública basado en MySQL Community Edition"
+    ],
+    correct: 0,
+    explain: "MySQL Database Service (MDS) en OCI es un servicio de base de datos nativo de OCI totalmente gestionado, construido y operado por el equipo de MySQL de Oracle. Características: (1) Totalmente gestionado — Oracle gestiona el aprovisionamiento, parchado del SO y MySQL, backups automáticos, monitoreo y alta disponibilidad; el cliente NO necesita parchear nada; (2) Basado en MySQL Enterprise Edition — incluye características enterprise como MySQL Enterprise Backup y auditoría (no Community Edition); (3) Versión actual — soporta MySQL 8.0 y versiones recientes, no solo 5.7; (4) HeatWave — extensión opcional que añade procesamiento analítico in-memory masivamente paralelo directamente en MySQL sin ETL. Disponible exclusivamente en OCI."
+  },
+  {
+    q: "¿Cuáles son dos razones típicas por las que los clientes NO pueden mover su base de datos a la nube pública?",
+    options: [
+      "Regulaciones que impiden mover datos a la nube pública",
+      "El Costo Total de Propiedad en la nube pública es mayor que on-premises",
+      "La nube pública no proporciona almacenamiento para más de 10 TB",
+      "Poner datos en la nube rompería las reglas de residencia de datos"
+    ],
+    correct: [0, 3],
+    explain: "Existen dos barreras regulatorias y legales comunes que impiden a organizaciones mover bases de datos a la nube pública: (1) Regulaciones que impiden mover datos a la nube pública — sectores como defensa, gobierno, banca central y salud en ciertos países tienen normativas que prohíben explícitamente almacenar ciertos tipos de datos fuera de infraestructura controlada o en nubes públicas; (2) Reglas de residencia de datos (Data Residency Rules) — regulaciones como GDPR (UE), LGPD (Brasil) o leyes nacionales específicas exigen que los datos de ciudadanos permanezcan dentro de las fronteras geográficas del país o región, lo que puede ser incompatible con nubes públicas globales. El TCO en la nube puede ser menor o mayor dependiendo del caso. La nube pública soporta almacenamiento de petabytes, sin límite de 10 TB."
+  },
+  {
+    q: "El DBA ha determinado que el número de OCPU asignado a una Autonomous Database no proporciona suficiente rendimiento. ¿Qué opción tiene el DBA en este caso?",
+    options: [
+      "No se requiere tiempo de inactividad ya que el número de OCPU puede aumentarse desde la consola de OCI, pero los usuarios deben ser informados de que no deben usar ninguna aplicación durante al menos una hora",
+      "Llamar al soporte de Oracle Cloud y elevar una solicitud para aumentar el número de OCPU. Esperar un tiempo de inactividad de aproximadamente una hora",
+      "Abrir la base de datos en la consola de OCI y aumentar el número de OCPU. No se requiere tiempo de inactividad",
+      "Planificar un tiempo de inactividad de una hora y aumentar el número de OCPU mientras la base de datos está fuera de línea"
+    ],
+    correct: 2,
+    explain: "Oracle Autonomous Database soporta escalado elástico de OCPU en línea (online), lo que significa que el DBA puede aumentar (o disminuir) el número de OCPUs directamente desde la consola de OCI o la API sin ningún tiempo de inactividad, y sin que los usuarios necesiten dejar de usar la aplicación. El cambio se aplica de forma inmediata sin interrumpir las conexiones activas. Esta es una de las ventajas clave de ADB frente a bases de datos tradicionales: la capacidad de escalar recursos de cómputo sin mantenimiento programado. No se requiere contactar a Oracle Support, no hay downtime y los usuarios no necesitan detener su actividad. El escalado puede incluso automatizarse con Auto Scaling para responder automáticamente a picos de carga."
+  },
+  {
+    q: "¿Qué opción de despliegue proporciona el mayor grado de seguridad y gobernanza mientras ofrece una experiencia de base de datos completamente self-service?",
+    options: [
+      "Exadata Cloud Service",
+      "Oracle Autonomous Database",
+      "Oracle MySQL Database Service",
+      "Oracle Database Cloud Service"
+    ],
+    correct: 1,
+    explain: "Oracle Autonomous Database combina el máximo nivel de automatización con seguridad y gobernanza integradas: (1) Auto-parcheado — aplica automáticamente parches de seguridad sin tiempo de inactividad, garantizando que siempre esté en la versión más segura; (2) TDE siempre activo — cifrado de datos en reposo no se puede deshabilitar; (3) Cifrado de red siempre activo — todas las conexiones requieren mTLS (mutual TLS); (4) Auditoría automática — auditoría de base de datos activada por defecto; (5) Self-service completo — el usuario puede aprovisionar, escalar y gestionar sin intervención de Oracle; (6) Sin acceso al SO — ni Oracle ni el cliente tiene acceso al sistema operativo subyacente, eliminando vectores de ataque. Exadata Cloud Service, MySQL y Database Cloud Service requieren gestión de seguridad más manual."
+  },
+  {
+    q: "Oracle Data Lakehouse simplifica la integración, almacenamiento y procesamiento de datos. ¿Qué dos servicios se usan para la persistencia de datos en Lakehouse?",
+    options: [
+      "OCI Data Catalog",
+      "OCI Object Storage",
+      "Autonomous Database",
+      "OCI GoldenGate"
+    ],
+    correct: [1, 2],
+    explain: "Oracle Data Lakehouse combina las ventajas del Data Lake (almacenamiento de datos crudos de bajo costo) y el Data Warehouse (datos estructurados con SQL). Para persistencia de datos, utiliza dos servicios principales: (1) OCI Object Storage — almacena datos crudos, semiestructurados (JSON, CSV, Parquet, Avro, ORC) y no estructurados en formatos abiertos. Es el 'lago' del Lakehouse — masivo, económico e ilimitado; (2) Autonomous Database — almacena datos estructurados procesados con esquema definido para consultas SQL de alto rendimiento. Es el 'warehouse' del Lakehouse, con External Tables que permiten consultar datos directamente en Object Storage. OCI Data Catalog es el catálogo de metadatos (no persistencia). GoldenGate es para replicación y streaming de datos, no persistencia."
+  },
+  {
+    q: "Oracle Lakehouse proporciona amplias capacidades de procesamiento de datos. ¿Qué servicio NO proporciona procesamiento de datos en OCI Lakehouse?",
+    options: [
+      "NoSQL Service",
+      "Autonomous Database",
+      "Big Data Service",
+      "OCI Data Flow"
+    ],
+    correct: 0,
+    explain: "Oracle NoSQL Database Cloud Service NO es parte del stack de procesamiento de datos del Lakehouse de OCI. NoSQL Service es una base de datos NoSQL de baja latencia optimizada para aplicaciones OLTP de alta velocidad con datos de clave-valor, columnas y documentos JSON — no es una herramienta de procesamiento analítico de datos a escala para Lakehouse. Los servicios que SÍ proporcionan procesamiento de datos en OCI Lakehouse: Autonomous Database — SQL analítico, ML in-database, External Tables sobre Object Storage; Big Data Service — clúster Hadoop/Spark gestionado para procesamiento de Big Data; OCI Data Flow — servicio serverless de Apache Spark para procesamiento de grandes volúmenes de datos. OCI Data Catalog, Oracle Analytics Cloud y OCI Data Integration también son parte del ecosistema Lakehouse."
+  },
+  {
+    q: "OCI Data Catalog es una parte integral de la solución Lakehouse. ¿Qué nivel de detalle de datos proporciona Data Catalog cuando se integra con Autonomous Databases y Object Storage?",
+    options: [
+      "Entornos analíticos",
+      "Vista de datos para descubrimiento",
+      "Data Warehouse",
+      "Fuente de servicios gestionados"
+    ],
+    correct: 1,
+    explain: "OCI Data Catalog proporciona una vista de datos para descubrimiento (data discovery) cuando se integra con Autonomous Database y Object Storage. Sus funciones específicas: (1) Inventario de datos — catálogo de todos los activos de datos disponibles (tablas, vistas, archivos, etc.) con sus metadatos técnicos y de negocio; (2) Descubrimiento automático de datos — escanea y cataloga automáticamente nuevos objetos en Object Storage y tablas en Autonomous Database; (3) Linaje de datos — rastrea el origen y transformaciones de los datos; (4) Clasificación de datos sensibles — identifica automáticamente datos potencialmente sensibles (PII); (5) Glosario de negocio — vincula términos de negocio con activos técnicos. No es un entorno analítico, un Data Warehouse ni una fuente de servicios gestionados."
+  },
+  {
+    q: "¿Qué servicio de Lakehouse debe usar para el procesamiento serverless de Spark?",
+    options: [
+      "OCI Object Storage",
+      "Oracle Analytics Cloud",
+      "OCI Data Flow",
+      "OCI Data Catalog"
+    ],
+    correct: 2,
+    explain: "OCI Data Flow es el servicio serverless de Apache Spark en OCI, ideal para procesamiento de grandes volúmenes de datos sin gestionar infraestructura. Características: (1) Serverless — no se aprovisiona ni gestiona ningún clúster; OCI crea y destruye los recursos por ejecución; (2) Apache Spark — plataforma de procesamiento distribuido open-source con soporte para Spark SQL, Spark Streaming, MLlib y GraphX; (3) Escalado automático — asigna recursos dinámicamente según el tamaño del job; (4) Integrado con Object Storage — lee y escribe datos en OCI Object Storage nativamente (Parquet, ORC, CSV, JSON); (5) Pay-per-use — se factura solo por el tiempo de ejecución. OCI Object Storage es almacenamiento, no procesamiento. Oracle Analytics Cloud es una herramienta de BI/visualización. OCI Data Catalog es el catálogo de metadatos."
+  },
+  {
+    q: "¿Cuáles dos son características clave de Oracle Autonomous Database?",
+    options: [
+      "Menos automatizado",
+      "El cliente gestiona todo",
+      "Menor costo",
+      "Mayor costo",
+      "Oracle gestiona todo"
+    ],
+    correct: [2, 4],
+    explain: "Oracle Autonomous Database tiene dos características clave distintivas: (1) Menor costo — la automatización elimina gran parte del costo de DBA y administración de infraestructura. El modelo de pago por uso y el auto-scaling reducen los costos operativos. Autonomous Database puede ejecutar cargas de trabajo complejas con menos recursos al optimizar automáticamente la configuración; (2) Oracle gestiona todo — a diferencia de otras opciones de base de datos en la nube, con Autonomous Database Oracle gestiona completamente el motor: parches automáticos sin downtime, ajuste automático de rendimiento (auto-indexing, auto-partitioning), copias de seguridad automáticas, escalado automático y alta disponibilidad. El cliente no tiene acceso al SO ni necesita gestionar la infraestructura. Esto es lo opuesto de 'menos automatizado' o 'el cliente gestiona todo'."
+  },
+  {
+    q: "¿Cuáles dos son objetivos de la estrategia de Gestión de Datos de Oracle?",
+    options: [
+      "Automatizar todo para desarrolladores, analistas de datos, DBAs y científicos de datos",
+      "Ofrecer múltiples puntos de integración para bases de datos de terceros que funcionen mejor para cargas de trabajo mixtas y analíticas",
+      "Proporcionar la base de datos SQL convergente más rápida y escalable",
+      "Proporcionar la mejor plataforma solo para cargas de trabajo de data warehouse"
+    ],
+    correct: [0, 2],
+    explain: "La estrategia de Gestión de Datos de Oracle tiene dos objetivos fundamentales: (1) Automatizar todo para todos los roles — el objetivo es eliminar tareas manuales y repetitivas para desarrolladores (aprovisionamiento self-service), analistas de datos (consultas automáticamente optimizadas), DBAs (parches automáticos, ajuste de rendimiento) y científicos de datos (AutoML, preparación automática de datos). Esto se materializa en Autonomous Database y herramientas como Oracle Data Studio; (2) Base de datos SQL convergente más rápida y escalable — Oracle posiciona su base de datos como la única plataforma que soporta múltiples tipos de datos y cargas de trabajo (OLTP, OLAP, JSON, Graph, Spatial, ML) con el máximo rendimiento, eliminando la necesidad de múltiples bases de datos especializadas. Oracle NO busca integrar bases de datos de terceros ni limitarse solo a data warehouse."
+  }
+];
+</script>
+<script src="exam-engine.js"></script>
+</body>
+</html>
